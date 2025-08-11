@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>پروفایل</title>
+  <link rel="stylesheet" href="panel.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>پنل</h2>
+      <ul>
+        <li><a href="panel.html">🏠 داشبورد</a></li>
+        <li><a href="prof.html" class="active">👤 پروفایل</a></li>
+        <li><a href="#">⚙️ تنظیمات</a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+      <header>
+        <h1>👤 پروفایل من</h1>
+      </header>
+
+      <section class="section">
+        <form id="profileForm">
+          <label>نام کاربری:
+            <input type="text" id="username" value="">
+          </label>
+
+          <br>
+          <br>
+
+          <label>رمز فعلی:
+            <br><br>
+            <input type="password" id="currentPassword" placeholder="رمز فعلی">
+          </label>
+          <br>
+
+          <label>رمز جدید:
+            <br><br>
+            <input type="password" id="newPassword" placeholder="رمز جدید">
+          </label>
+          
+
+          <label>تکرار رمز جدید:
+            <br><br>
+            <input type="password" id="confirmPassword" placeholder="تکرار رمز جدید">
+          </label>
+
+          <button type="submit">💾 ذخیره تغییرات</button>
+        </form>
+        <p id="message" style="margin-top: 10px;"></p>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

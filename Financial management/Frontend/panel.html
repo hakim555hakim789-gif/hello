@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>پنل کاربری</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>پنل</h2>
+      <ul>
+        <li><a href="panel.html">🏠 داشبورد</a></li>
+        <li><a href="prof.html">👤 پروفایل</a></li>
+        <li><a href="#">⚙️ تنظیمات</a></li>
+        <li><a href="Login.html" onclick="logout()">🚪 خروج از اکانت</a></li>
+      </ul>
+    </aside>
+
+    <main class="main">
+    <header>
+      <h1 id="welcomeTitle">خوش آمدید،</h1>
+      <p id="accountDate">در حال بارگذاری اطلاعات...</p>
+    </header>
+
+      <section class="section">
+        <h2>اطلاعات کلی</h2>
+        <p>شما می‌توانید اطلاعات شخصی و مالی خود را از این بخش مدیریت کنید.</p>
+        <button onclick="location.href='maali.html'">💰 رفتن به مدیریت مالی</button>
+      </section>
+    </main>
+
+
+  </div>
+
+  <script src="../Backend/panel.js"></script>
+
+</body>
+</html>
+
+

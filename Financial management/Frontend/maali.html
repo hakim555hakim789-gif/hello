@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مدیریت تراکنش‌ها</title>
+  <link rel="stylesheet" href="maali.css" />
+</head>
+<body>
+
+  <header>
+    <h2>مدیریت مالی کاربر</h2>
+  </header>
+
+  <main class="container">
+
+    <section class="form-section">
+      <h2>افزودن تراکنش جدید</h2>
+      <form id="transactionForm">
+        <input type="text" id="title" placeholder="عنوان تراکنش" required />
+        <input type="number" id="amount" placeholder="مبلغ (مثبت یا منفی)" required />
+
+        <select id="type" required>
+          <option value="">نوع تراکنش</option>
+          <option value="درآمد">درآمد</option>
+          <option value="هزینه">هزینه</option>
+          <option value="خرید">خرید</option>
+          <option value="فروش">فروش</option>
+          <option value="واریز">واریز</option>
+          <option value="برداشت">برداشت</option>
+        </select>
+
+        <input type="text" id="category" placeholder="دسته‌بندی" />
+
+        <div class="input-wrapper" onclick="document.getElementById('date').focus()">
+          <label for="date">زمان تراکنش:</label>
+          <input type="datetime-local" id="date" name="date" required />
+        </div>
+
+        <button type="submit">ثبت تراکنش</button>
+        <p id="res"></p>
+      </form>
+    </section>
+
+    <section class="filters">
+      <h3>فیلتر تراکنش‌ها</h3>
+      <input type="text" id="searchTitle" placeholder="جستجو در عنوان" />
+      <select id="filterType">
+        <option value="">همه انواع</option>
+        <option value="درآمد">درآمد</option>
+        <option value="هزینه">هزینه</option>
+        <option value="خرید">خرید</option>
+        <option value="فروش">فروش</option>
+        <option value="واریز">واریز</option>
+        <option value="برداشت">برداشت</option>
+      </select>
+
+      <div class="date-range">
+        <div class="date-input" onclick="document.getElementById('fromDate').focus()">
+          <label for="fromDate">از تاریخ:</label>
+          <input type="datetime-local" id="fromDate" name="fromDate" />
+        </div>
+
+        <div class="date-input" onclick="document.getElementById('toDate').focus()">
+          <label for="toDate">تا تاریخ:</label>
+          <input type="datetime-local" id="toDate" name="toDate" />
+        </div>
+      </div>
+    </section>
+
+    <section class="transaction-list">
+      <h2>لیست تراکنش‌ها</h2>
+      <div id="transactionsContainer">
+      </div>
+    </section>
+
+    <section class="stats">
+      <h3>آمار کلی</h3>
+      <p>درآمد کل: <span id="totalIncome">0</span></p>
+      <p>هزینه کل: <span id="totalExpense">0</span></p>
+      <p>موجودی: <span id="balance">0</span></p>
+    </section>
+
+  </main>
+
+  <script src="../Backend/maali.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
