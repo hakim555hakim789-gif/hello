@@ -239,3 +239,18 @@ header {
   float: left;
 }
 
+form.editing {
+  border: 1px solid #ff9800;
+  box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.15);
+}
+
+form.editing button[type="submit"] {
+  background-color: #ff9800;
+}
+
+form button.cancel-btn {
+  background-color: #666;
+  color: #fff;
+  margin-right: 8px;
+}
+

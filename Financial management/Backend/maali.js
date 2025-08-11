@@ -26,9 +26,25 @@ if (localStorage.getItem('allTransactions')) {
     });
 }
 
+// عناصر کمکی فرم
+const formEl = document.getElementById('transactionForm');
+const formTitleEl = document.querySelector('.form-section h2');
+const submitBtnEl = document.querySelector('#transactionForm button[type="submit"]');
+
 // حالت ویرایش
 let editMode = false;
 let editId = null;
+
+function exitEditMode() {
+  editMode = false;
+  editId = null;
+  formEl.classList.remove('editing');
+  if (formTitleEl) formTitleEl.textContent = 'افزودن تراکنش جدید';
+  if (submitBtnEl) submitBtnEl.textContent = 'ثبت تراکنش';
+  const cancelBtn = document.getElementById('cancelEditBtn');
+  if (cancelBtn) cancelBtn.remove();
+  document.getElementById('res').textContent = '';
+}
 
 function editTransaction(id) {
   const t = allTransactions.find(tr => tr.id === id);
@@ -40,6 +56,27 @@ function editTransaction(id) {
   document.getElementById('type').value = t.type;
   document.getElementById('category').value = t.category;
   document.getElementById('date').value = t.date;
+
+  // UI تغییرات
+  formEl.classList.add('editing');
+  if (formTitleEl) formTitleEl.textContent = 'در حال ویرایش تراکنش';
+  if (submitBtnEl) submitBtnEl.textContent = 'ذخیره تغییرات';
+
+  if (!document.getElementById('cancelEditBtn')) {
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.id = 'cancelEditBtn';
+    cancelBtn.className = 'cancel-btn';
+    cancelBtn.textContent = 'لغو ویرایش';
+    submitBtnEl.insertAdjacentElement('afterend', cancelBtn);
+    cancelBtn.addEventListener('click', () => {
+      formEl.reset();
+      exitEditMode();
+    });
+  }
+
+  // اسکرول نرم به فرم
+  document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   document.getElementById('res').textContent = 'در حال ویرایش تراکنش...';
 }
 
@@ -61,10 +98,9 @@ document.getElementById('transactionForm').addEventListener('submit', e => {
     userTransactions = allTransactions.filter(t => t.user_id === user.id);
     showTransactions();
     calculateStats();
-    document.getElementById('transactionForm').reset();
+    formEl.reset();
     document.getElementById('res').textContent = 'تراکنش ویرایش شد.';
-    editMode = false;
-    editId = null;
+    exitEditMode();
     return;
   }
 
