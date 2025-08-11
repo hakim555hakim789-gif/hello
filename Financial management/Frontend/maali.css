@@ -1,0 +1,241 @@
+body {
+  background-color: #1e1e1e; /* خاکستری تیره */
+  color: #f0f0f0;
+  font-family: 'Vazir', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.input-wrapper input {
+  padding: 6px;
+  font-size: 14px;
+}
+
+header {
+  background-color: #2a2a2a;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  border-bottom: 1px solid #444;
+}
+
+.container {
+  padding: 2rem;
+}
+
+form {
+  background-color: #2e2e2e;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+form input,
+form select {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  width: 100%;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #3a8dff;
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.transaction-card {
+  background-color: #2e2e2e;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats {
+  background-color: #3a3a3a;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 2rem;
+}
+
+/* تنظیمات پایه */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+  font-family: 'Tahoma', sans-serif;
+}
+
+body {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+/* فرم افزودن تراکنش */
+.form-section {
+  background-color: #2a2a2a;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.form-section input,
+.form-section select,
+.form-section button {
+  display: block;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-section input,
+.form-section select {
+  background-color: #444;
+  color: #f0f0f0;
+}
+
+.form-section button {
+  background-color: #00b894;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-section button:hover {
+  background-color: #019875;
+}
+
+/* فیلترها */
+.filters {
+  background-color: #2f2f2f;
+  padding: 15px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+}
+
+.filters input,
+.filters select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+/* لیست تراکنش‌ها */
+.transaction-list {
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #393939;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.transaction .amount.positive {
+  color: #00ff9f;
+}
+
+.transaction .amount.negative {
+  color: #ff7675;
+}
+
+
+.transaction button {
+  background-color: #d63031;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.transaction button.edit {
+  background-color: #0984e3;
+}
+
+.transaction button:hover {
+  opacity: 0.8;
+}
+
+.stats {
+  background-color: #2f2f2f;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.stats span {
+  font-weight: bold;
+}
+
+.transaction-item {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  direction: rtl;
+  background-color: #f5f5f5;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.transaction-item.positive {
+  background-color: #e0f5e9; 
+  color: #2e7d32;
+}
+
+.transaction-item.negative {
+  background-color: #fcebea; 
+  color: #c62828;
+}
+
+.transaction-item button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  float: left;
+}
+

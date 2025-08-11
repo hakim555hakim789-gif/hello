@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>لیست کاربران</title>
+</head>
+<body>
+  <h1>لیست کاربران</h1>
+  <ul id="userList"></ul>
+
+  <script>
+    fetch('/Frontend/users.json')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('userList');
+        data.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.username} (${user.created_acc})`;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("error in read JSON:", err);
+      });
+  </script>
+
+
+  <script>
+    fetch('/Frontend/users.json')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('userList');
+        data.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.type} (${user.title})`;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("error in read JSON:", err);
+      });
+  </script>
+
+
+  <h1>تراکنشا</h1>
+  
+ <ul id="list_fin"></ul>
+
+  <script>
+    fetch('/Frontend/users.json')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('list_fin');
+        data.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.user_id} (${user.amount}) (${user.title}) ${user.category} ${user.date} ${user.type} `;
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("error in read JSON:", err);
+      });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

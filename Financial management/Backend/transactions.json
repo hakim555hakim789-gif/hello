@@ -1,0 +1,182 @@
+[
+  {
+    "id": 101,
+    "user_id": 1,
+    "title": "حقوق تیر",
+    "amount": 5000,
+    "category": "job",
+    "date": "2025-06-02T09:45",
+    "type": "درآمد"
+  },
+  {
+    "id": 102,
+    "user_id": 1,
+    "title": "خرید لباس",
+    "amount": -450,
+    "category": "clothing",
+    "date": "2025-06-10T17:30",
+    "type": "خرید"
+  },
+  {
+    "id": 103,
+    "user_id": 1,
+    "title": "فروش موبایل قدیمی",
+    "amount": 800,
+    "category": "personal",
+    "date": "2025-06-15T12:00",
+    "type": "فروش"
+  },
+  {
+    "id": 104,
+    "user_id": 2,
+    "title": "خرید مواد غذایی",
+    "amount": 100,
+    "category": "food",
+    "date": "2025-06-05T11:15",
+    "type": "هزینه"
+  },
+    {
+    "id": 120,
+    "user_id": 2,
+    "title": "برداشت پول بانگ",
+    "amount": -100,
+    "category": "banking",
+    "date": "2025-06-09T14:40",
+    "type": "برداشت"
+  },
+  {
+    "id": 105,
+    "user_id": 2,
+    "title": "دریافت کمک‌هزینه",
+    "amount": 700,
+    "category": "support",
+    "date": "2025-06-12T10:20",
+    "type": "درآمد"
+  },
+  {
+    "id": 106,
+    "user_id": 2,
+    "title": "واریز به حساب",
+    "amount": 1500,
+    "category": "banking",
+    "date": "2025-06-14T08:45",
+    "type": "واریز"
+  },
+    {
+    "id": 119,
+    "user_id": 2,
+    "title": "برداشت کارت به کارت",
+    "amount": -500,
+    "category": "banking",
+    "date": "2025-06-09T14:40",
+    "type": "برداشت"
+  },
+  {
+    "id": 107,
+    "user_id": 3,
+    "title": "خرید لپ‌تاپ",
+    "amount": 1200,
+    "category": "tech",
+    "date": "2025-06-06T10:00",
+    "type": "خرید"
+  },
+  {
+    "id": 108,
+    "user_id": 3,
+    "title": "فروش پرینتر",
+    "amount": 400,
+    "category": "personal",
+    "date": "2025-06-11T15:00",
+    "type": "فروش"
+  },
+  {
+    "id": 109,
+    "user_id": 3,
+    "title": "پرداخت قبض برق",
+    "amount": -180,
+    "category": "bills",
+    "date": "2025-06-16T19:10",
+    "type": "هزینه"
+  },
+  {
+    "id": 110,
+    "user_id": 4,
+    "title": "فروش دوچرخه",
+    "amount": 300,
+    "category": "personal",
+    "date": "2025-06-07T13:30",
+    "type": "فروش"
+  },
+  {
+    "id": 111,
+    "user_id": 4,
+    "title": "برداشت نقدی",
+    "amount": -400,
+    "category": "banking",
+    "date": "2025-06-10T09:00",
+    "type": "برداشت"
+  },
+  {
+    "id": 112,
+    "user_id": 4,
+    "title": "هزینه تاکسی",
+    "amount": -90,
+    "category": "transport",
+    "date": "2025-06-18T07:30",
+    "type": "هزینه"
+  },
+  {
+    "id": 113,
+    "user_id": 5,
+    "title": "واریز بانکی",
+    "amount": 2000,
+    "category": "banking",
+    "date": "2025-06-08T08:20",
+    "type": "واریز"
+  },
+  {
+    "id": 114,
+    "user_id": 5,
+    "title": "خرید هدیه",
+    "amount": -250,
+    "category": "gift",
+    "date": "2025-06-13T16:00",
+    "type": "خرید"
+  },
+  {
+    "id": 115,
+    "user_id": 5,
+    "title": "فروش کتاب قدیمی",
+    "amount": 150,
+    "category": "personal",
+    "date": "2025-06-15T18:40",
+    "type": "فروش"
+  },
+  {
+    "id": 116,
+    "user_id": 6,
+    "title": "برداشت ATM",
+    "amount": -500,
+    "category": "banking",
+    "date": "2025-06-09T14:40",
+    "type": "برداشت"
+  },
+  {
+    "id": 117,
+    "user_id": 6,
+    "title": "حقوق پروژه",
+    "amount": 2500,
+    "category": "freelance",
+    "date": "2025-06-17T11:50",
+    "type": "درآمد"
+  },
+  {
+    "id": 118,
+    "user_id": 6,
+    "title": "هزینه اشتراک نتفلیکس",
+    "amount": -80,
+    "category": "entertainment",
+    "date": "2025-06-20T20:30",
+    "type": "هزینه"
+  }
+]
