@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نماینده سینما - مدیریت فیلم‌ها</title>
+    <link rel="stylesheet" href="cinema_representative.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-film"></i>
+                <span>نماینده سینما</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active">داشبورد</a>
+                <a href="#movies" class="nav-link">مدیریت فیلم‌ها</a>
+                <a href="#schedules" class="nav-link">برنامه‌ها</a>
+                <a href="#reports" class="nav-link">گزارشات</a>
+            </div>
+            <div class="nav-auth">
+                <span id="repInfo" class="rep-info"></span>
+                <button onclick="logout()" class="btn btn-outline">خروج</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="dashboard-section">
+                <h2 class="section-title">داشبورد نماینده</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>فیلم‌های فعال</h3>
+                            <p id="activeMovies">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>برنامه‌های امروز</h3>
+                            <p id="todaySchedules">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>رزروهای امروز</h3>
+                            <p id="todayBookings">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>میانگین امتیاز</h3>
+                            <p id="avgRating">0</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Movies Management Section -->
+            <section id="movies" class="movies-section">
+                <h2 class="section-title">مدیریت فیلم‌ها</h2>
+                <div class="section-header">
+                    <button onclick="showAddMovieModal()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        افزودن فیلم جدید
+                    </button>
+                </div>
+                <div class="movies-grid" id="moviesGrid">
+                    <!-- Movies will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Schedules Section -->
+            <section id="schedules" class="schedules-section">
+                <h2 class="section-title">مدیریت برنامه‌ها</h2>
+                <div class="section-header">
+                    <button onclick="showAddScheduleModal()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        افزودن برنامه جدید
+                    </button>
+                </div>
+                <div class="schedules-table-container">
+                    <table class="schedules-table">
+                        <thead>
+                            <tr>
+                                <th>فیلم</th>
+                                <th>تاریخ</th>
+                                <th>ساعت</th>
+                                <th>سالن</th>
+                                <th>قیمت</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedulesTableBody">
+                            <!-- Schedules will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="reports-section">
+                <h2 class="section-title">گزارشات</h2>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>محبوب‌ترین فیلم‌ها</h3>
+                        <div id="popularMovies" class="report-content">
+                            <!-- Popular movies will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <h3>آمار رزروها</h3>
+                        <div id="bookingStats" class="report-content">
+                            <!-- Booking stats will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Add Movie Modal -->
+    <div id="addMovieModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>افزودن فیلم جدید</h3>
+                <button onclick="closeAddMovieModal()" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addMovieForm">
+                    <div class="form-group">
+                        <label for="movieTitle">عنوان فیلم</label>
+                        <input type="text" id="movieTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieGenre">ژانر</label>
+                        <input type="text" id="movieGenre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieRating">امتیاز</label>
+                        <input type="number" id="movieRating" min="0" max="5" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="moviePrice">قیمت (تومان)</label>
+                        <input type="number" id="moviePrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDuration">مدت زمان</label>
+                        <input type="text" id="movieDuration" placeholder="مثال: 2 ساعت و 30 دقیقه" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDescription">توضیحات</label>
+                        <textarea id="movieDescription" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieImage">تصویر (ایموجی)</label>
+                        <input type="text" id="movieImage" placeholder="مثال: 🎬" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeAddMovieModal()" class="btn btn-outline">انصراف</button>
+                <button onclick="addMovie()" class="btn btn-primary">افزودن فیلم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div id="addScheduleModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>افزودن برنامه جدید</h3>
+                <button onclick="closeAddScheduleModal()" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addScheduleForm">
+                    <div class="form-group">
+                        <label for="scheduleMovie">انتخاب فیلم</label>
+                        <select id="scheduleMovie" required>
+                            <option value="">فیلم را انتخاب کنید</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleDate">تاریخ</label>
+                        <input type="date" id="scheduleDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleTime">ساعت</label>
+                        <input type="time" id="scheduleTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleHall">سالن</label>
+                        <select id="scheduleHall" required>
+                            <option value="">سالن را انتخاب کنید</option>
+                            <option value="سالن 1">سالن 1</option>
+                            <option value="سالن 2">سالن 2</option>
+                            <option value="سالن 3">سالن 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="schedulePrice">قیمت (تومان)</label>
+                        <input type="number" id="schedulePrice" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeAddScheduleModal()" class="btn btn-outline">انصراف</button>
+                <button onclick="addSchedule()" class="btn btn-primary">افزودن برنامه</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 سینما. تمامی حقوق محفوظ است.</p>
+        </div>
+    </footer>
+
+    <script src="cinema_representative.js"></script>
+</body>
+</html>
