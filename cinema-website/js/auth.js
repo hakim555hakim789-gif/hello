@@ -17,6 +17,7 @@ class AuthSystem {
     loadUsers() {
         const users = localStorage.getItem('users');
         if (!users) {
+            console.log('No users found in localStorage, creating default users...');
             // Create default admin user
             const defaultUsers = [
                 {
@@ -84,9 +85,103 @@ class AuthSystem {
                 }
             ];
             localStorage.setItem('users', JSON.stringify(defaultUsers));
+            console.log('Default users created and saved to localStorage');
             return defaultUsers;
         }
-        return JSON.parse(users);
+        
+        const parsedUsers = JSON.parse(users);
+        console.log('Users loaded from localStorage:', parsedUsers.length, 'users found');
+        
+        // Check if we need to add default users (in case they were overwritten)
+        const hasAdmin = parsedUsers.some(u => u.username === 'admin');
+        const hasRep = parsedUsers.some(u => u.username === 'representative');
+        const hasManagers = parsedUsers.some(u => u.role === 'cinema_manager');
+        
+        if (!hasAdmin || !hasRep || !hasManagers) {
+            console.log('Some default users missing, adding them...');
+            const defaultUsers = [
+                {
+                    id: Math.max(...parsedUsers.map(u => u.id)) + 1,
+                    username: 'admin',
+                    email: 'admin@cinema-iran.ir',
+                    firstName: 'مدیر',
+                    lastName: 'سیستم',
+                    phone: '09123456789',
+                    password: this.hashPassword('admin123'),
+                    role: 'admin',
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: Math.max(...parsedUsers.map(u => u.id)) + 2,
+                    username: 'representative',
+                    email: 'rep@cinema-iran.ir',
+                    firstName: 'نماینده',
+                    lastName: 'عمومی',
+                    phone: '09187654321',
+                    password: this.hashPassword('rep123'),
+                    role: 'representative',
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: Math.max(...parsedUsers.map(u => u.id)) + 3,
+                    username: 'cinema1_manager',
+                    email: 'manager1@cinema-iran.ir',
+                    firstName: 'احمد',
+                    lastName: 'محمدی',
+                    phone: '09111111111',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 1,
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: Math.max(...parsedUsers.map(u => u.id)) + 4,
+                    username: 'cinema2_manager',
+                    email: 'manager2@cinema-iran.ir',
+                    firstName: 'فاطمه',
+                    lastName: 'احمدی',
+                    phone: '09122222222',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 2,
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: Math.max(...parsedUsers.map(u => u.id)) + 5,
+                    username: 'cinema3_manager',
+                    email: 'manager3@cinema-iran.ir',
+                    firstName: 'علی',
+                    lastName: 'رضایی',
+                    phone: '09133333333',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 3,
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                }
+            ];
+            
+            // Add missing users
+            const usersToAdd = [];
+            if (!hasAdmin) usersToAdd.push(defaultUsers[0]);
+            if (!hasRep) usersToAdd.push(defaultUsers[1]);
+            if (!hasManagers) {
+                usersToAdd.push(defaultUsers[2], defaultUsers[3], defaultUsers[4]);
+            }
+            
+            if (usersToAdd.length > 0) {
+                const updatedUsers = [...parsedUsers, ...usersToAdd];
+                localStorage.setItem('users', JSON.stringify(updatedUsers));
+                console.log('Added missing default users');
+                return updatedUsers;
+            }
+        }
+        
+        return parsedUsers;
     }
 
     // Load current user from localStorage
@@ -225,17 +320,24 @@ class AuthSystem {
                 this.loginUser(user, rememberMe);
                 this.showNotification('🎉 ورود موفقیت‌آمیز بود! خوش آمدید', 'success');
                 
+                // Check if user was trying to book a movie
+                const selectedMovie = localStorage.getItem('selectedMovie');
+                let redirectUrl = 'index.html';
+                
                 // Redirect based on role
+                if (user.role === 'admin') {
+                    redirectUrl = 'admin.html';
+                } else if (user.role === 'cinema_manager') {
+                    redirectUrl = 'cinema_manager.html';
+                } else if (user.role === 'representative') {
+                    redirectUrl = 'representative.html';
+                } else if (selectedMovie) {
+                    // User was trying to book a movie, redirect to seats
+                    redirectUrl = 'seats.html';
+                }
+                
                 setTimeout(() => {
-                    if (user.role === 'admin') {
-                        window.location.href = 'admin.html';
-                    } else if (user.role === 'cinema_manager') {
-                        window.location.href = 'cinema_manager.html';
-                    } else if (user.role === 'representative') {
-                        window.location.href = 'representative.html';
-                    } else {
-                        window.location.href = 'index.html';
-                    }
+                    window.location.href = redirectUrl;
                 }, 1500);
             } else {
                 // Login failed

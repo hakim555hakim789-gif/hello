@@ -3,6 +3,7 @@ let currentMovies = [];
 let filteredMovies = [];
 let currentPage = 1;
 const moviesPerPage = 6;
+let selectedCinemaFilter = 'all';
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
@@ -23,34 +24,49 @@ function initializeWebsite() {
 // Load initial data from JSON
 async function loadInitialData() {
     try {
-        const response = await fetch('data/initial-data.json');
+        console.log('Loading initial data from JSON...');
+        const response = await fetch('./data/initial-data.json');
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log('JSON data loaded successfully:', data);
         
         // Initialize localStorage with data if empty
         if (!localStorage.getItem('movies')) {
             localStorage.setItem('movies', JSON.stringify(data.movies));
+            console.log('Movies loaded to localStorage');
         }
         
         if (!localStorage.getItem('cinemas')) {
             localStorage.setItem('cinemas', JSON.stringify(data.cinemas));
+            console.log('Cinemas loaded to localStorage');
         }
         
         if (!localStorage.getItem('users')) {
             // Combine admin users with sample users
             const allUsers = [...data.users, ...data.sampleUsers];
             localStorage.setItem('users', JSON.stringify(allUsers));
+            console.log('Users loaded to localStorage');
         }
         
         if (!localStorage.getItem('schedules')) {
             localStorage.setItem('schedules', JSON.stringify(data.schedules));
+            console.log('Schedules loaded to localStorage');
         }
         
         if (!localStorage.getItem('bookings')) {
             localStorage.setItem('bookings', JSON.stringify(data.bookings));
+            console.log('Bookings loaded to localStorage');
         }
         
+        console.log('All initial data loaded successfully!');
+        
     } catch (error) {
-        console.log('Using default data');
+        console.error('Error loading JSON data:', error);
+        console.log('Using default data instead');
         // If JSON file not found, use default data
         loadDefaultData();
     }
@@ -342,13 +358,59 @@ function loadMoreMovies() {
 function filterMovies(genre) {
     currentPage = 1;
     
-    if (genre === 'all') {
-        filteredMovies = [...currentMovies];
-    } else {
-        filteredMovies = currentMovies.filter(movie => movie.genre === genre);
+    // Update active filter button
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Apply all filters
+    applyFilters();
+}
+
+// Filter movies by cinema
+function filterMoviesByCinema() {
+    const cinemaSelect = document.getElementById('cinemaSelect');
+    selectedCinemaFilter = cinemaSelect.value;
+    
+    console.log('Filtering movies by cinema:', selectedCinemaFilter);
+    
+    // Reset to first page
+    currentPage = 1;
+    
+    // Apply filters
+    applyFilters();
+}
+
+// Apply all filters (genre and cinema)
+function applyFilters() {
+    const selectedGenre = document.querySelector('.filter-btn.active').dataset.genre;
+    
+    // Start with all movies
+    let filtered = [...currentMovies];
+    
+    // Apply genre filter
+    if (selectedGenre !== 'all') {
+        filtered = filtered.filter(movie => movie.genre === selectedGenre);
     }
     
+    // Apply cinema filter
+    if (selectedCinemaFilter !== 'all') {
+        const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+        const cinemaSchedules = schedules.filter(s => s.cinemaId === parseInt(selectedCinemaFilter) && s.isActive);
+        const movieIds = cinemaSchedules.map(s => s.movieId);
+        
+        filtered = filtered.filter(movie => movieIds.includes(movie.id));
+        console.log(`Cinema ${selectedCinemaFilter} has movies:`, movieIds);
+    }
+    
+    filteredMovies = filtered;
+    
+    // Update display
     displayMovies();
+    
+    // Update filter buttons
+    updateFilterButtons();
 }
 
 // Book a movie
@@ -356,19 +418,24 @@ function bookMovie(movieId) {
     const user = JSON.parse(localStorage.getItem('loggedInUser'));
     
     if (!user) {
-        showNotification('برای رزرو صندلی ابتدا وارد شوید', 'warning');
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 2000);
+        // Save selected movie and redirect to login
+        const selectedMovie = currentMovies.find(m => m.id === movieId);
+        if (selectedMovie) {
+            localStorage.setItem('selectedMovie', JSON.stringify(selectedMovie));
+            showNotification('🔐 برای رزرو صندلی ابتدا وارد شوید', 'info');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        }
         return;
     }
     
-    // Store selected movie in localStorage
+    // User is logged in, save movie and redirect to seats
     const selectedMovie = currentMovies.find(m => m.id === movieId);
-    localStorage.setItem('selectedMovie', JSON.stringify(selectedMovie));
-    
-    // Redirect to seat selection page
-    window.location.href = 'seats.html';
+    if (selectedMovie) {
+        localStorage.setItem('selectedMovie', JSON.stringify(selectedMovie));
+        window.location.href = 'seats.html';
+    }
 }
 
 // Setup event listeners

@@ -68,6 +68,16 @@
                 <button class="filter-btn" data-genre="کمدی">کمدی</button>
                 <button class="filter-btn" data-genre="علمی-تخیلی">علمی-تخیلی</button>
                 <button class="filter-btn" data-genre="ترسناک">ترسناک</button>
+                
+                <div class="cinema-filter">
+                    <label for="cinemaSelect">فیلتر بر اساس سینما:</label>
+                    <select id="cinemaSelect" onchange="filterMoviesByCinema()">
+                        <option value="all">همه سینماها</option>
+                        <option value="1">سینما مرکزی تهران</option>
+                        <option value="2">سینما پارک ملت</option>
+                        <option value="3">سینما آفتاب انقلاب</option>
+                    </select>
+                </div>
             </div>
 
             <div class="movies-grid" id="moviesGrid">

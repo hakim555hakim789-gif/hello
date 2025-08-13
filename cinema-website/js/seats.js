@@ -14,6 +14,7 @@ class SeatSelectionSystem {
         this.loadCinemas();
         this.setupEventListeners();
         this.updateUserInfo();
+        this.updateConfirmButton();
     }
 
     // Load movie data from localStorage
@@ -22,9 +23,27 @@ class SeatSelectionSystem {
         if (movieData) {
             this.selectedMovie = JSON.parse(movieData);
             this.displayMovieInfo();
+            console.log('Movie loaded from localStorage:', this.selectedMovie);
         } else {
-            // Redirect to home if no movie selected
-            window.location.href = 'index.html';
+            // Try to get movie from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const movieId = urlParams.get('movieId');
+            
+            if (movieId) {
+                const allMovies = JSON.parse(localStorage.getItem('movies') || '[]');
+                this.selectedMovie = allMovies.find(m => m.id === parseInt(movieId));
+                if (this.selectedMovie) {
+                    localStorage.setItem('selectedMovie', JSON.stringify(this.selectedMovie));
+                    this.displayMovieInfo();
+                    console.log('Movie loaded from URL parameters:', this.selectedMovie);
+                }
+            }
+            
+            if (!this.selectedMovie) {
+                // Redirect to home if no movie selected
+                console.log('No movie selected, redirecting to home');
+                window.location.href = 'index.html';
+            }
         }
     }
 
@@ -85,6 +104,72 @@ class SeatSelectionSystem {
         
         if (!this.selectedCinema) return;
 
+        console.log(`Cinema ${cinemaId} selected:`, this.selectedCinema);
+        
+        // Show available movies for this cinema
+        this.showAvailableMoviesForCinema(cinemaId);
+    }
+    
+    // Show movie selection modal
+    showMovieSelection(movies) {
+        const modal = document.createElement('div');
+        modal.className = 'modal movie-selection-modal';
+        modal.style.display = 'block';
+        
+        modal.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>انتخاب فیلم</h2>
+                    <p>فیلم مورد نظر خود را انتخاب کنید</p>
+                </div>
+                <div class="modal-body">
+                    <div class="movies-grid">
+                        ${movies.map(movie => `
+                            <div class="movie-card" onclick="selectMovieForCinema(${movie.id})">
+                                <div class="movie-image">${movie.image}</div>
+                                <div class="movie-info">
+                                    <h3>${movie.title}</h3>
+                                    <p class="movie-genre">${movie.genre}</p>
+                                    <p class="movie-duration">${movie.duration}</p>
+                                    <p class="movie-rating">⭐ ${movie.rating}/5</p>
+                                    <p class="movie-price">${movie.price} تومان</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+            }
+        });
+    }
+    
+    // Select movie and proceed to seat selection
+    selectMovieForCinema(movieId) {
+        const allMovies = JSON.parse(localStorage.getItem('movies') || '[]');
+        this.selectedMovie = allMovies.find(m => m.id === movieId);
+        
+        // Remove movie selection modal
+        const modal = document.querySelector('.movie-selection-modal');
+        if (modal) {
+            document.body.removeChild(modal);
+        }
+        
+        // Proceed to seat selection
+        this.proceedToSeatSelection();
+        
+        console.log('Movie selected for cinema:', this.selectedMovie);
+    }
+    
+    // Proceed to seat selection after movie selection
+    proceedToSeatSelection() {
         // Hide cinema selection, show seat selection
         document.querySelector('.cinema-selection-section').style.display = 'none';
         document.getElementById('seatSelectionSection').style.display = 'block';
@@ -95,10 +180,19 @@ class SeatSelectionSystem {
         document.getElementById('selectedCinemaAddress').textContent = this.selectedCinema.address;
         document.getElementById('selectedCinemaCapacity').textContent = `ظرفیت: ${this.selectedCinema.capacity} صندلی`;
 
+        // Update movie info display
+        this.displayMovieInfo();
+
         // Generate seats for this cinema
         this.generateSeatsData();
         this.renderSeats();
         this.updateSummary();
+        this.updateConfirmButton();
+        
+        console.log('Proceeding to seat selection with:', {
+            movie: this.selectedMovie,
+            cinema: this.selectedCinema
+        });
     }
 
     // Generate seats data based on cinema capacity
@@ -178,23 +272,34 @@ class SeatSelectionSystem {
         if (seat.isSelected) {
             // Deselect seat
             seat.isSelected = false;
-            this.selectedSeats = this.selectedSeats.filter(s => s !== seatId);
+            this.selectedSeats = this.selectedSeats.filter(id => id !== seatId);
         } else {
             // Select seat
             seat.isSelected = true;
             this.selectedSeats.push(seatId);
         }
 
-        // Update UI
+        // Update seat display
         this.renderSeats();
+        
+        // Update summary and confirm button
         this.updateSummary();
         this.updateConfirmButton();
+        
+        console.log('Seat toggled:', {
+            seatId,
+            isSelected: seat.isSelected,
+            totalSelected: this.selectedSeats.length
+        });
     }
 
     // Update booking summary
     updateSummary() {
-        if (!this.selectedMovie || !this.selectedCinema) return;
-
+        if (!this.selectedMovie || !this.selectedCinema) {
+            console.log('Cannot update summary: movie or cinema not selected');
+            return;
+        }
+        
         const currentDate = new Date();
         const tomorrow = new Date(currentDate);
         tomorrow.setDate(currentDate.getDate() + 1);
@@ -204,18 +309,47 @@ class SeatSelectionSystem {
         document.getElementById('summaryDate').textContent = this.formatDate(tomorrow);
         document.getElementById('summaryTime').textContent = '20:00';
         document.getElementById('summarySeats').textContent = this.selectedSeats.join(', ') || '-';
-        document.getElementById('summaryCount').textContent = this.selectedSeats.length;
         
-        const totalPrice = this.selectedSeats.length * this.parsePrice(this.selectedMovie.price);
-        document.getElementById('summaryTotal').textContent = `${this.formatPrice(totalPrice)} تومان`;
+        // Calculate total price
+        const pricePerSeat = this.parsePrice(this.selectedMovie.price);
+        const totalPrice = this.selectedSeats.length * pricePerSeat;
+        document.getElementById('summaryPrice').textContent = `${totalPrice.toLocaleString()} تومان`;
+        
+        console.log('Summary updated:', {
+            movie: this.selectedMovie.title,
+            cinema: this.selectedCinema.name,
+            seats: this.selectedSeats,
+            totalPrice: totalPrice
+        });
     }
 
     // Update confirm button state
     updateConfirmButton() {
         const confirmBtn = document.getElementById('confirmBtn');
-        if (confirmBtn) {
-            confirmBtn.disabled = this.selectedSeats.length === 0;
+        if (!confirmBtn) return;
+        
+        const hasSeats = this.selectedSeats.length > 0;
+        const hasMovie = this.selectedMovie !== null;
+        const hasCinema = this.selectedCinema !== null;
+        
+        if (hasSeats && hasMovie && hasCinema) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = `تایید رزرو (${this.selectedSeats.length} صندلی)`;
+            confirmBtn.classList.add('btn-primary');
+            confirmBtn.classList.remove('btn-disabled');
+        } else {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'انتخاب صندلی';
+            confirmBtn.classList.remove('btn-primary');
+            confirmBtn.classList.add('btn-disabled');
         }
+        
+        console.log('Confirm button updated:', {
+            hasSeats,
+            hasMovie,
+            hasCinema,
+            selectedSeats: this.selectedSeats.length
+        });
     }
 
     // Parse price string to number
@@ -265,19 +399,18 @@ class SeatSelectionSystem {
         // Add any additional event listeners here
     }
 
-    // Clear seat selection
+    // Clear all seat selections
     clearSelection() {
-        this.selectedSeats.forEach(seatId => {
-            const seat = this.seatsData.find(s => s.id === seatId);
-            if (seat) {
-                seat.isSelected = false;
-            }
+        this.selectedSeats = [];
+        this.seatsData.forEach(seat => {
+            seat.isSelected = false;
         });
         
-        this.selectedSeats = [];
         this.renderSeats();
         this.updateSummary();
         this.updateConfirmButton();
+        
+        console.log('All seat selections cleared');
     }
 
     // Confirm booking
@@ -423,12 +556,53 @@ class SeatSelectionSystem {
     delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
+    // Show available movies for selected cinema
+    showAvailableMoviesForCinema(cinemaId) {
+        const schedules = JSON.parse(localStorage.getItem('schedules') || '[]');
+        const cinemaSchedules = schedules.filter(s => s.cinemaId === cinemaId && s.isActive);
+        
+        if (cinemaSchedules.length === 0) {
+            this.showNotification('❌ هیچ فیلمی در این سینما در دسترس نیست', 'error');
+            return;
+        }
+        
+        // Get movie IDs for this cinema
+        const movieIds = cinemaSchedules.map(s => s.movieId);
+        
+        // Get movies data
+        const allMovies = JSON.parse(localStorage.getItem('movies') || '[]');
+        const availableMovies = allMovies.filter(movie => movieIds.includes(movie.id));
+        
+        console.log(`Cinema ${cinemaId} has ${availableMovies.length} available movies:`, availableMovies);
+        
+        // Show movie selection if multiple movies available
+        if (availableMovies.length > 1) {
+            this.showMovieSelection(availableMovies);
+        } else if (availableMovies.length === 1) {
+            // Auto-select the only available movie
+            this.selectedMovie = availableMovies[0];
+            this.proceedToSeatSelection();
+        } else {
+            // No movies available in this cinema
+            this.showNotification('❌ هیچ فیلمی در این سینما در دسترس نیست', 'error');
+        }
+        
+        // Update confirm button state
+        this.updateConfirmButton();
+    }
 }
 
 // Global functions
 function selectCinema(cinemaId) {
     if (window.seatSystem) {
         window.seatSystem.selectCinema(cinemaId);
+    }
+}
+
+function selectMovieForCinema(movieId) {
+    if (window.seatSystem) {
+        window.seatSystem.selectMovieForCinema(movieId);
     }
 }
 
