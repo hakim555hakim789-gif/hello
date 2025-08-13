@@ -452,7 +452,7 @@ class AuthSystem {
 
     // Validate register inputs
     validateRegisterInputs(formData) {
-        const requiredFields = ['firstName', 'lastName', 'email', 'phone', 'password', 'confirmPassword'];
+        const requiredFields = ['firstName', 'lastName', 'username', 'email', 'phone', 'password', 'confirmPassword'];
         
         for (const field of requiredFields) {
             if (!formData[field]) {
@@ -460,6 +460,13 @@ class AuthSystem {
                 this.highlightInput(field, 'error');
                 return false;
             }
+        }
+        
+        // Validate username format
+        if (!this.isValidUsername(formData.username)) {
+            this.showNotification('❌ نام کاربری نامعتبر است (۴ تا ۲۰ کاراکتر؛ فقط حروف، اعداد، نقطه، زیرخط)', 'error');
+            this.highlightInput('username', 'error');
+            return false;
         }
         
         // Validate email format
@@ -485,8 +492,8 @@ class AuthSystem {
         
         // Validate password strength
         const strength = this.checkPasswordStrength(formData.password);
-        if (strength.strength < 3) {
-            this.showNotification('❌ رمز عبور باید حداقل متوسط باشد', 'error');
+        if (strength.strength < 2) { // relax to allow simpler passwords if needed
+            this.showNotification('❌ رمز عبور خیلی ضعیف است', 'error');
             this.highlightInput('password', 'error');
             return false;
         }
@@ -505,6 +512,7 @@ class AuthSystem {
         const labels = {
             firstName: 'نام',
             lastName: 'نام خانوادگی',
+            username: 'نام کاربری',
             email: 'ایمیل',
             phone: 'شماره تلفن',
             password: 'رمز عبور',
@@ -519,6 +527,12 @@ class AuthSystem {
         return emailRegex.test(email);
     }
 
+    // Validate username format (4-20 chars, letters, numbers, underscore, dot)
+    isValidUsername(username) {
+        const usernameRegex = /^[A-Za-z0-9._]{4,20}$/;
+        return usernameRegex.test(username);
+    }
+
     // Validate phone format
     isValidPhone(phone) {
         const phoneRegex = /^09\d{9}$/;
@@ -527,8 +541,11 @@ class AuthSystem {
 
     // Check if user exists
     userExists(username, email) {
+        const uLower = (username || '').toLowerCase();
+        const eLower = (email || '').toLowerCase();
         return this.users.some(user => 
-            user.username === username || user.email === email
+            (user.username && user.username.toLowerCase() === uLower) ||
+            (user.email && user.email.toLowerCase() === eLower)
         );
     }
 
@@ -536,7 +553,7 @@ class AuthSystem {
     createUser(formData) {
         return {
             id: this.users.length + 1,
-            username: formData.email.split('@')[0],
+            username: formData.username, // use provided username
             email: formData.email,
             firstName: formData.firstName,
             lastName: formData.lastName,
