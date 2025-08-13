@@ -54,6 +54,10 @@
                     <i class="fas fa-building"></i>
                     <span>مدیریت سینماها</span>
                 </a>
+                <a href="#schedules" class="nav-item" data-section="schedules">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>برنامه‌های نمایش</span>
+                </a>
                 <a href="#reports" class="nav-item" data-section="reports">
                     <i class="fas fa-chart-bar"></i>
                     <span>گزارشات</span>
@@ -114,6 +118,26 @@
                             <span class="stat-number" id="todayRevenue">0 تومان</span>
                         </div>
                     </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>تعداد سینماها</h3>
+                            <span class="stat-number" id="totalCinemas">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>برنامه‌های فعال</h3>
+                            <span class="stat-number" id="activeSchedules">0</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="dashboard-charts">
@@ -131,6 +155,13 @@
                             <i class="fas fa-chart-pie"></i>
                             <p>نمودار محبوبیت فیلم‌ها</p>
                         </div>
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <h3>فعالیت‌های اخیر</h3>
+                    <div class="activities-list" id="recentActivities">
+                        <!-- Recent activities will be loaded here -->
                     </div>
                 </div>
             </section>
@@ -169,6 +200,20 @@
             <section id="users" class="admin-section">
                 <div class="section-header">
                     <h1>مدیریت کاربران</h1>
+                    <div class="user-filters">
+                        <select id="roleFilter" onchange="filterUsers()">
+                            <option value="">همه نقش‌ها</option>
+                            <option value="admin">مدیر</option>
+                            <option value="cinema_manager">مدیر سینما</option>
+                            <option value="representative">نماینده</option>
+                            <option value="user">کاربر</option>
+                        </select>
+                        <select id="statusFilter" onchange="filterUsers()">
+                            <option value="">همه وضعیت‌ها</option>
+                            <option value="active">فعال</option>
+                            <option value="inactive">غیرفعال</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="users-table-container">
@@ -194,6 +239,15 @@
             <section id="bookings" class="admin-section">
                 <div class="section-header">
                     <h1>مدیریت رزروها</h1>
+                    <div class="booking-filters">
+                        <select id="statusFilter" onchange="filterBookings()">
+                            <option value="">همه وضعیت‌ها</option>
+                            <option value="confirmed">تایید شده</option>
+                            <option value="pending">در انتظار</option>
+                            <option value="cancelled">لغو شده</option>
+                        </select>
+                        <input type="date" id="dateFilter" onchange="filterBookings()" placeholder="فیلتر بر اساس تاریخ">
+                    </div>
                 </div>
 
                 <div class="bookings-table-container">
@@ -202,6 +256,7 @@
                             <tr>
                                 <th>کد رزرو</th>
                                 <th>فیلم</th>
+                                <th>سینما</th>
                                 <th>کاربر</th>
                                 <th>صندلی‌ها</th>
                                 <th>قیمت کل</th>
@@ -232,6 +287,36 @@
                 </div>
             </section>
 
+            <!-- Schedules Section -->
+            <section id="schedules" class="admin-section">
+                <div class="section-header">
+                    <h1>برنامه‌های نمایش</h1>
+                    <button class="btn btn-primary" onclick="showAddScheduleModal()">
+                        <i class="fas fa-plus"></i>
+                        افزودن برنامه جدید
+                    </button>
+                </div>
+
+                <div class="schedules-table-container">
+                    <table class="admin-table" id="schedulesTable">
+                        <thead>
+                            <tr>
+                                <th>فیلم</th>
+                                <th>سینما</th>
+                                <th>تاریخ</th>
+                                <th>ساعت</th>
+                                <th>قیمت</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedulesTableBody">
+                            <!-- Schedules will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
             <!-- Reports Section -->
             <section id="reports" class="admin-section">
                 <div class="section-header">
@@ -243,7 +328,7 @@
                         <h3>گزارش فروش ماهانه</h3>
                         <div class="report-content">
                             <p>مشاهده آمار فروش و درآمد ماهانه</p>
-                            <button class="btn btn-outline">دانلود گزارش</button>
+                            <button class="btn btn-outline" onclick="generateMonthlyReport()">دانلود گزارش</button>
                         </div>
                     </div>
 
@@ -251,7 +336,7 @@
                         <h3>گزارش کاربران</h3>
                         <div class="report-content">
                             <p>آمار کاربران و فعالیت‌های آنان</p>
-                            <button class="btn btn-outline">دانلود گزارش</button>
+                            <button class="btn btn-outline" onclick="generateUsersReport()">دانلود گزارش</button>
                         </div>
                     </div>
 
@@ -259,7 +344,15 @@
                         <h3>گزارش فیلم‌ها</h3>
                         <div class="report-content">
                             <p>آمار محبوبیت و عملکرد فیلم‌ها</p>
-                            <button class="btn btn-outline">دانلود گزارش</button>
+                            <button class="btn btn-outline" onclick="generateMoviesReport()">دانلود گزارش</button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <h3>گزارش سینماها</h3>
+                        <div class="report-content">
+                            <p>آمار عملکرد هر سینما</p>
+                            <button class="btn btn-outline" onclick="generateCinemasReport()">دانلود گزارش</button>
                         </div>
                     </div>
                 </div>
@@ -290,6 +383,22 @@
                     <div class="form-group">
                         <label>آدرس</label>
                         <textarea class="form-control" rows="3">تهران، خیابان ولیعصر، پلاک 123</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>زبان پیش‌فرض</label>
+                        <select class="form-control">
+                            <option value="fa">فارسی</option>
+                            <option value="en">انگلیسی</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>منطقه زمانی</label>
+                        <select class="form-control">
+                            <option value="Asia/Tehran">تهران (GMT+3:30)</option>
+                            <option value="UTC">UTC</option>
+                        </select>
                     </div>
                     
                     <button class="btn btn-primary">ذخیره تنظیمات</button>
@@ -324,6 +433,10 @@
                                 <option value="علمی-تخیلی">علمی-تخیلی</option>
                                 <option value="ترسناک">ترسناک</option>
                                 <option value="فانتزی">فانتزی</option>
+                                <option value="عاشقانه">عاشقانه</option>
+                                <option value="ماجراجویی">ماجراجویی</option>
+                                <option value="معمایی">معمایی</option>
+                                <option value="جنگی">جنگی</option>
                             </select>
                         </div>
                     </div>
@@ -352,6 +465,17 @@
                         <div class="form-group">
                             <label>سال انتشار</label>
                             <input type="number" id="movieYear" class="form-control" min="1900" max="2030" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>کارگردان</label>
+                            <input type="text" id="movieDirector" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>زبان</label>
+                            <input type="text" id="movieLanguage" class="form-control" value="فارسی" required>
                         </div>
                     </div>
                 </form>
@@ -384,9 +508,20 @@
                         <textarea id="cinemaAddress" class="form-control" rows="3" required></textarea>
                     </div>
                     
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>شماره تلفن</label>
+                            <input type="tel" id="cinemaPhone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <input type="email" id="cinemaEmail" class="form-control" required>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label>شماره تلفن</label>
-                        <input type="tel" id="cinemaPhone" class="form-control" required>
+                        <label>ظرفیت</label>
+                        <input type="number" id="cinemaCapacity" class="form-control" min="10" max="200" required>
                     </div>
                     
                     <div class="form-group">
@@ -408,6 +543,14 @@
                                 <input type="checkbox" value="پارکینگ">
                                 <span>پارکینگ</span>
                             </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="کافه">
+                                <span>کافه</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="سالن انتظار لوکس">
+                                <span>سالن انتظار لوکس</span>
+                            </label>
                         </div>
                     </div>
                 </form>
@@ -415,6 +558,58 @@
             <div class="modal-footer">
                 <button class="btn btn-outline" onclick="closeModal('addCinemaModal')">انصراف</button>
                 <button class="btn btn-primary" onclick="addCinema()">افزودن سینما</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Schedule Modal -->
+    <div class="modal" id="addScheduleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>افزودن برنامه نمایش جدید</h2>
+                <button class="modal-close" onclick="closeModal('addScheduleModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addScheduleForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>فیلم</label>
+                            <select id="scheduleMovie" class="form-control" required>
+                                <option value="">انتخاب فیلم</option>
+                                <!-- Movies will be loaded here -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>سینما</label>
+                            <select id="scheduleCinema" class="form-control" required>
+                                <option value="">انتخاب سینما</option>
+                                <!-- Cinemas will be loaded here -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>تاریخ</label>
+                            <input type="date" id="scheduleDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>ساعت</label>
+                            <input type="time" id="scheduleTime" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>قیمت (تومان)</label>
+                        <input type="number" id="schedulePrice" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeModal('addScheduleModal')">انصراف</button>
+                <button class="btn btn-primary" onclick="addSchedule()">افزودن برنامه</button>
             </div>
         </div>
     </div>

@@ -174,6 +174,54 @@ body {
     margin: 0;
 }
 
+/* Cinema Info Card */
+.cinema-info-card {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.cinema-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.cinema-header h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.cinema-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.cinema-status.active {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+}
+
+.cinema-details p {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-light);
+}
+
+.cinema-details i {
+    color: var(--primary-color);
+    width: 20px;
+    text-align: center;
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
@@ -228,6 +276,7 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .chart-card {
@@ -258,6 +307,53 @@ body {
     font-size: 3rem;
     margin-bottom: 1rem;
     opacity: 0.5;
+}
+
+/* Recent Activities */
+.recent-activities {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.recent-activities h3 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.activities-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.activity-item i {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.activity-content h4 {
+    color: var(--text-dark);
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.activity-content p {
+    color: var(--text-light);
+    font-size: 0.8rem;
+    margin: 0;
 }
 
 /* Admin Tables */
@@ -303,6 +399,86 @@ body {
 .btn-sm {
     padding: 6px 12px;
     font-size: 0.8rem;
+}
+
+/* Status and Role Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.status-badge.active {
+    background: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+}
+
+.status-badge.inactive {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--error-color);
+}
+
+.status-badge.pending {
+    background: rgba(243, 156, 18, 0.1);
+    color: var(--warning-color);
+}
+
+.role-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.role-badge.admin {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--primary-color);
+}
+
+.role-badge.cinema_manager {
+    background: rgba(52, 152, 219, 0.1);
+    color: var(--accent-color);
+}
+
+.role-badge.representative {
+    background: rgba(155, 89, 182, 0.1);
+    color: #9b59b6;
+}
+
+.role-badge.user {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+}
+
+/* Filters */
+.user-filters,
+.booking-filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-filters select,
+.booking-filters select,
+.booking-filters input {
+    padding: 8px 12px;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    background: var(--bg-white);
+    transition: var(--transition);
+}
+
+.user-filters select:focus,
+.booking-filters select:focus,
+.booking-filters input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
 /* Cinemas Grid */
@@ -378,6 +554,113 @@ body {
 .report-content p {
     color: var(--text-light);
     margin-bottom: 1rem;
+}
+
+/* Seats Management */
+.seat-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.seats-overview {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.seat-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.seat-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.stat-value {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.seat-map-container {
+    background: var(--bg-white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.screen-indicator {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    color: var(--text-light);
+}
+
+.screen-indicator i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.seats-grid {
+    display: grid;
+    gap: 8px;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.seat-item {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.seat-item.available {
+    background: var(--success-color);
+    color: white;
+}
+
+.seat-item.occupied {
+    background: var(--error-color);
+    color: white;
+    cursor: not-allowed;
+}
+
+.seat-item.vip {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.seat-item:hover:not(.occupied) {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Settings Form */
@@ -553,7 +836,7 @@ body {
 
 .modal-header h2 {
     color: var(--text-dark);
-    font-size: 1.5rem;
+    margin: 0;
 }
 
 .modal-close {
@@ -585,8 +868,8 @@ body {
     padding: 1.5rem;
     border-top: 1px solid #e1e8ed;
     display: flex;
-    gap: 1rem;
     justify-content: flex-end;
+    gap: 1rem;
 }
 
 /* Responsive Design */
@@ -598,6 +881,10 @@ body {
     .admin-main {
         margin-left: 250px;
     }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
@@ -606,12 +893,28 @@ body {
         transition: var(--transition);
     }
     
-    .admin-sidebar.show {
+    .admin-sidebar.active {
         transform: translateX(0);
     }
     
     .admin-main {
         margin-left: 0;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .user-filters,
+    .booking-filters {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
     }
     
     .stats-grid {
@@ -622,36 +925,31 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .form-row {
+    .cinemas-grid {
         grid-template-columns: 1fr;
     }
     
-    .section-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
+    .reports-grid {
+        grid-template-columns: 1fr;
     }
     
+    .seat-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .seat-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (max-width: 480px) {
     .admin-nav {
         padding: 0 1rem;
     }
     
     .admin-main {
         padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .admin-nav {
-        padding: 0 0.5rem;
-    }
-    
-    .nav-brand .logo span {
-        display: none;
-    }
-    
-    .admin-main {
-        padding: 0.5rem;
     }
     
     .modal-content {
@@ -663,6 +961,12 @@ body {
     .modal-body,
     .modal-footer {
         padding: 1rem;
+    }
+    
+    .cinema-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
     }
 }
 
@@ -682,50 +986,4 @@ body {
 
 .admin-sidebar::-webkit-scrollbar-thumb:hover {
     background: var(--primary-color);
-}
-
-/* Status Badges */
-.status-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.status-badge.active {
-    background: rgba(39, 174, 96, 0.1);
-    color: var(--success-color);
-}
-
-.status-badge.inactive {
-    background: rgba(231, 76, 60, 0.1);
-    color: var(--error-color);
-}
-
-.status-badge.pending {
-    background: rgba(243, 156, 18, 0.1);
-    color: var(--warning-color);
-}
-
-/* Role Badges */
-.role-badge {
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-.role-badge.admin {
-    background: rgba(231, 76, 60, 0.1);
-    color: var(--primary-color);
-}
-
-.role-badge.representative {
-    background: rgba(52, 152, 219, 0.1);
-    color: var(--accent-color);
-}
-
-.role-badge.user {
-    background: rgba(39, 174, 96, 0.1);
-    color: var(--success-color);
 }

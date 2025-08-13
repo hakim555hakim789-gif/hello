@@ -54,8 +54,26 @@
             </div>
         </section>
 
+        <!-- Cinema Selection Section -->
+        <section class="cinema-selection-section">
+            <div class="section-header">
+                <h2>انتخاب سینما</h2>
+                <p>سینمای مورد نظر خود را انتخاب کنید</p>
+            </div>
+            
+            <div class="cinemas-grid" id="cinemasGrid">
+                <!-- Cinemas will be loaded here -->
+            </div>
+        </section>
+
         <!-- Seat Selection Section -->
-        <section class="seat-selection-section">
+        <section class="seat-selection-section" id="seatSelectionSection" style="display: none;">
+            <div class="cinema-info-display">
+                <h3 id="selectedCinemaName">نام سینما</h3>
+                <p id="selectedCinemaAddress">آدرس سینما</p>
+                <p id="selectedCinemaCapacity">ظرفیت: 0 صندلی</p>
+            </div>
+
             <div class="screen-container">
                 <div class="screen">
                     <i class="fas fa-tv"></i>
@@ -94,13 +112,17 @@
         </section>
 
         <!-- Booking Summary Section -->
-        <section class="booking-summary-section">
+        <section class="booking-summary-section" id="bookingSummarySection" style="display: none;">
             <div class="booking-summary-card">
                 <h2>خلاصه رزرو</h2>
                 <div class="summary-content">
                     <div class="summary-item">
                         <span class="label">فیلم:</span>
                         <span class="value" id="summaryMovie">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="label">سینما:</span>
+                        <span class="value" id="summaryCinema">-</span>
                     </div>
                     <div class="summary-item">
                         <span class="label">تاریخ:</span>

@@ -4,140 +4,6 @@ let filteredMovies = [];
 let currentPage = 1;
 const moviesPerPage = 6;
 
-// Sample movies data with Persian titles and descriptions
-const moviesData = [
-    {
-        id: 1,
-        title: "آواتار: راه آب",
-        genre: "علمی-تخیلی",
-        rating: 4.8,
-        price: "180,000",
-        duration: "3 ساعت و 12 دقیقه",
-        description: "داستان خانواده Sully در دنیای Pandora و ماجراجویی‌های جدیدشان در اقیانوس‌های آبی",
-        image: "🎬",
-        year: 2024,
-        director: "جیمز کامرون",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 2,
-        title: "تنت",
-        genre: "اکشن",
-        rating: 4.5,
-        price: "150,000",
-        duration: "2 ساعت و 30 دقیقه",
-        description: "فیلمی درباره سفر در زمان و مبارزه برای نجات جهان از تهدیدات آینده",
-        image: "🎭",
-        year: 2023,
-        director: "کریستوفر نولان",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 3,
-        title: "جوکر",
-        genre: "درام",
-        rating: 4.9,
-        price: "120,000",
-        duration: "2 ساعت و 2 دقیقه",
-        description: "داستان زندگی Arthur Fleck و تبدیل شدنش به یکی از معروف‌ترین شرورهای دنیای کمیک",
-        image: "🃏",
-        year: 2023,
-        director: "تاد فیلیپس",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 4,
-        title: "اینتراستلار",
-        genre: "علمی-تخیلی",
-        rating: 4.7,
-        price: "140,000",
-        duration: "2 ساعت و 49 دقیقه",
-        description: "سفری فضایی برای یافتن خانه جدید برای بشریت در اعماق کیهان",
-        image: "🚀",
-        year: 2023,
-        director: "کریستوفر نولان",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 5,
-        title: "پلنگ سیاه: واکاندا برای همیشه",
-        genre: "اکشن",
-        rating: 4.6,
-        price: "130,000",
-        duration: "2 ساعت و 14 دقیقه",
-        description: "داستان Wakanda و محافظت از آن در برابر تهدیدات جدید",
-        image: "🐆",
-        year: 2024,
-        director: "رایان کوگلر",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 6,
-        title: "مرد عنکبوتی: راهی به خانه نیست",
-        genre: "اکشن",
-        rating: 4.4,
-        price: "160,000",
-        duration: "2 ساعت و 28 دقیقه",
-        description: "پیتر پارکر با دنیای چندجهانی مواجه می‌شود و باید با شرورهای مختلف مبارزه کند",
-        image: "🕷️",
-        year: 2023,
-        director: "جان واتس",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 7,
-        title: "داستان اسباب‌بازی 4",
-        genre: "کمدی",
-        rating: 4.3,
-        price: "100,000",
-        duration: "1 ساعت و 40 دقیقه",
-        description: "ماجراجویی جدید وودی و دوستانش در دنیای اسباب‌بازی‌ها",
-        image: "🧸",
-        year: 2023,
-        director: "جاش کوولی",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 8,
-        title: "آنا و برف",
-        genre: "ترسناک",
-        rating: 4.2,
-        price: "110,000",
-        duration: "1 ساعت و 55 دقیقه",
-        description: "داستان ترسناک دختری که در برف گم شده و با موجودات عجیب مواجه می‌شود",
-        image: "❄️",
-        year: 2024,
-        director: "کریس باکن",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 9,
-        title: "مرد آهنی: بازگشت",
-        genre: "اکشن",
-        rating: 4.6,
-        price: "170,000",
-        duration: "2 ساعت و 15 دقیقه",
-        description: "تونی استارک با تهدید جدیدی مواجه می‌شود و باید از فناوری پیشرفته استفاده کند",
-        image: "🤖",
-        year: 2024,
-        director: "شین بلک",
-        language: "انگلیسی با زیرنویس فارسی"
-    },
-    {
-        id: 10,
-        title: "جادوگران: میراث",
-        genre: "فانتزی",
-        rating: 4.1,
-        price: "95,000",
-        duration: "1 ساعت و 50 دقیقه",
-        description: "داستان جادوگران جوان که باید میراث اجدادی خود را کشف کنند",
-        image: "🔮",
-        year: 2023,
-        director: "رابرت زمکیس",
-        language: "انگلیسی با زیرنویس فارسی"
-    }
-];
-
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     initializeWebsite();
@@ -145,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Initialize website functionality
 function initializeWebsite() {
+    loadInitialData();
     loadMovies();
     setupEventListeners();
     setupScrollEffects();
@@ -153,10 +20,261 @@ function initializeWebsite() {
     setupNewsletterForm();
 }
 
+// Load initial data from JSON
+async function loadInitialData() {
+    try {
+        const response = await fetch('data/initial-data.json');
+        const data = await response.json();
+        
+        // Initialize localStorage with data if empty
+        if (!localStorage.getItem('movies')) {
+            localStorage.setItem('movies', JSON.stringify(data.movies));
+        }
+        
+        if (!localStorage.getItem('cinemas')) {
+            localStorage.setItem('cinemas', JSON.stringify(data.cinemas));
+        }
+        
+        if (!localStorage.getItem('users')) {
+            // Combine admin users with sample users
+            const allUsers = [...data.users, ...data.sampleUsers];
+            localStorage.setItem('users', JSON.stringify(allUsers));
+        }
+        
+        if (!localStorage.getItem('schedules')) {
+            localStorage.setItem('schedules', JSON.stringify(data.schedules));
+        }
+        
+        if (!localStorage.getItem('bookings')) {
+            localStorage.setItem('bookings', JSON.stringify(data.bookings));
+        }
+        
+    } catch (error) {
+        console.log('Using default data');
+        // If JSON file not found, use default data
+        loadDefaultData();
+    }
+}
+
+// Load default data if JSON file not available
+function loadDefaultData() {
+    const defaultMovies = [
+        {
+            id: 1,
+            title: "شب‌های تهران",
+            genre: "درام",
+            rating: 4.8,
+            price: "120,000",
+            duration: "2 ساعت و 15 دقیقه",
+            description: "داستان زندگی جوانان تهران در شب‌های پرهیاهوی پایتخت",
+            image: "🌃",
+            year: 2024,
+            director: "اصغر فرهادی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 2,
+            title: "مرد آهنی ایران",
+            genre: "اکشن",
+            rating: 4.6,
+            price: "150,000",
+            duration: "2 ساعت و 30 دقیقه",
+            description: "داستان قهرمانی که از فناوری پیشرفته برای دفاع از ایران استفاده می‌کند",
+            image: "🤖",
+            year: 2024,
+            director: "محمود کلاری",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 3,
+            title: "عشق در شیراز",
+            genre: "عاشقانه",
+            rating: 4.4,
+            price: "100,000",
+            duration: "1 ساعت و 55 دقیقه",
+            description: "داستان عاشقانه‌ای در شهر شعر و عشق، شیراز",
+            image: "🌹",
+            year: 2024,
+            director: "پرویز شهبازی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 4,
+            title: "ماجراجویی در کویر",
+            genre: "ماجراجویی",
+            rating: 4.2,
+            price: "110,000",
+            duration: "2 ساعت و 5 دقیقه",
+            description: "سفری هیجان‌انگیز در کویرهای زیبای ایران",
+            image: "🏜️",
+            year: 2024,
+            director: "علی حاتمی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 5,
+            title: "کمدی تهران",
+            genre: "کمدی",
+            rating: 4.5,
+            price: "95,000",
+            duration: "1 ساعت و 45 دقیقه",
+            description: "طنز و خنده در زندگی روزمره مردم تهران",
+            image: "😄",
+            year: 2024,
+            director: "مهدی مهدویان",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 6,
+            title: "رازهای اصفهان",
+            genre: "معمایی",
+            rating: 4.7,
+            price: "130,000",
+            duration: "2 ساعت و 20 دقیقه",
+            description: "کشف رازهای تاریخی شهر اصفهان در قالب فیلمی هیجان‌انگیز",
+            image: "🏛️",
+            year: 2024,
+            director: "بهرام بیضایی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 7,
+            title: "عشق و جنگ",
+            genre: "جنگی",
+            rating: 4.9,
+            price: "140,000",
+            duration: "2 ساعت و 45 دقیقه",
+            description: "داستان عاشقانه‌ای در دوران دفاع مقدس",
+            image: "⚔️",
+            year: 2024,
+            director: "ابراهیم حاتمی‌کیا",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 8,
+            title: "جادوی تبریز",
+            genre: "فانتزی",
+            rating: 4.3,
+            price: "105,000",
+            duration: "2 ساعت",
+            description: "داستان جادویی در شهر تبریز با جلوه‌های ویژه",
+            image: "🔮",
+            year: 2024,
+            director: "محمدرضا اصلانی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 9,
+            title: "عشق در مشهد",
+            genre: "عاشقانه",
+            rating: 4.1,
+            price: "90,000",
+            duration: "1 ساعت و 50 دقیقه",
+            description: "داستان عاشقانه‌ای در شهر مقدس مشهد",
+            image: "💕",
+            year: 2024,
+            director: "رضا میرکریمی",
+            language: "فارسی",
+            isActive: true
+        },
+        {
+            id: 10,
+            title: "ماجرای یزد",
+            genre: "ماجراجویی",
+            rating: 4.0,
+            price: "85,000",
+            duration: "1 ساعت و 40 دقیقه",
+            description: "ماجراجویی در شهر تاریخی یزد",
+            image: "🏺",
+            year: 2024,
+            director: "علی رضا داوودنژاد",
+            language: "فارسی",
+            isActive: true
+        }
+    ];
+
+    if (!localStorage.getItem('movies')) {
+        localStorage.setItem('movies', JSON.stringify(defaultMovies));
+    }
+
+    // Set default users if not exists
+    const defaultUsers = [
+        {
+            id: 1,
+            username: 'admin',
+            email: 'admin@cinema-iran.ir',
+            firstName: 'مدیر',
+            lastName: 'سیستم',
+            phone: '09123456789',
+            password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+            role: 'admin',
+            isActive: true,
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: 2,
+            username: 'representative',
+            email: 'rep@cinema-iran.ir',
+            firstName: 'نماینده',
+            lastName: 'عمومی',
+            phone: '09187654321',
+            password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+            role: 'representative',
+            isActive: true,
+            createdAt: new Date().toISOString()
+        }
+    ];
+
+    if (!localStorage.getItem('users')) {
+        localStorage.setItem('users', JSON.stringify(defaultUsers));
+    }
+
+    // Set default cinemas if not exists
+    const defaultCinemas = [
+        {
+            id: 1,
+            name: 'سینما مرکزی تهران',
+            address: 'تهران، خیابان ولیعصر، پلاک 123',
+            phone: '021-12345678',
+            capacity: 30,
+            features: ['صندلی راحت', 'صدای دالبی', 'وای‌فای رایگان', 'پارکینگ']
+        },
+        {
+            id: 2,
+            name: 'سینما پارک ملت',
+            address: 'تهران، پارک ملت، خیابان پارک',
+            phone: '021-87654321',
+            capacity: 40,
+            features: ['صندلی VIP', 'صدای IMAX', 'کافه', 'سالن انتظار لوکس']
+        },
+        {
+            id: 3,
+            name: 'سینما آفتاب انقلاب',
+            address: 'تهران، خیابان انقلاب، پلاک 456',
+            phone: '021-11223344',
+            capacity: 60,
+            features: ['صندلی راحت', 'صدای دالبی', 'پارکینگ', 'فروشگاه']
+        }
+    ];
+
+    if (!localStorage.getItem('cinemas')) {
+        localStorage.setItem('cinemas', JSON.stringify(defaultCinemas));
+    }
+}
+
 // Load movies
 function loadMovies() {
-    currentMovies = [...moviesData];
-    filteredMovies = [...moviesData];
+    const movies = JSON.parse(localStorage.getItem('movies') || '[]');
+    currentMovies = movies.filter(movie => movie.isActive);
+    filteredMovies = [...currentMovies];
     displayMovies();
 }
 

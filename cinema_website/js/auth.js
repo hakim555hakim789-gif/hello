@@ -36,10 +36,49 @@ class AuthSystem {
                     username: 'representative',
                     email: 'rep@cinema-iran.ir',
                     firstName: 'نماینده',
-                    lastName: 'سینما',
+                    lastName: 'عمومی',
                     phone: '09187654321',
                     password: this.hashPassword('rep123'),
                     role: 'representative',
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: 3,
+                    username: 'cinema1_manager',
+                    email: 'manager1@cinema-iran.ir',
+                    firstName: 'احمد',
+                    lastName: 'محمدی',
+                    phone: '09111111111',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 1,
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: 4,
+                    username: 'cinema2_manager',
+                    email: 'manager2@cinema-iran.ir',
+                    firstName: 'فاطمه',
+                    lastName: 'احمدی',
+                    phone: '09122222222',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 2,
+                    createdAt: new Date().toISOString(),
+                    isActive: true
+                },
+                {
+                    id: 5,
+                    username: 'cinema3_manager',
+                    email: 'manager3@cinema-iran.ir',
+                    firstName: 'علی',
+                    lastName: 'رضایی',
+                    phone: '09133333333',
+                    password: this.hashPassword('manager123'),
+                    role: 'cinema_manager',
+                    cinemaId: 3,
                     createdAt: new Date().toISOString(),
                     isActive: true
                 }
@@ -184,25 +223,27 @@ class AuthSystem {
             if (user) {
                 // Login successful
                 this.loginUser(user, rememberMe);
-                this.showNotification('ورود موفقیت‌آمیز بود', 'success');
+                this.showNotification('🎉 ورود موفقیت‌آمیز بود! خوش آمدید', 'success');
                 
                 // Redirect based on role
                 setTimeout(() => {
                     if (user.role === 'admin') {
                         window.location.href = 'admin.html';
+                    } else if (user.role === 'cinema_manager') {
+                        window.location.href = 'cinema_manager.html';
                     } else if (user.role === 'representative') {
                         window.location.href = 'representative.html';
                     } else {
                         window.location.href = 'index.html';
                     }
-                }, 1000);
+                }, 1500);
             } else {
                 // Login failed
-                this.showNotification('نام کاربری یا رمز عبور اشتباه است', 'error');
+                this.showNotification('❌ نام کاربری یا رمز عبور اشتباه است', 'error');
                 this.shakeForm(form);
             }
         } catch (error) {
-            this.showNotification('خطا در ورود. لطفاً دوباره تلاش کنید', 'error');
+            this.showNotification('❌ خطا در ورود. لطفاً دوباره تلاش کنید', 'error');
         } finally {
             this.setButtonLoading(submitBtn, false);
         }
@@ -228,11 +269,11 @@ class AuthSystem {
 
         try {
             // Simulate API call delay
-            await this.delay(1000);
+            await this.delay(1500);
 
             // Check if user already exists
             if (this.userExists(formData.username, formData.email)) {
-                this.showNotification('کاربری با این نام کاربری یا ایمیل قبلاً وجود دارد', 'error');
+                this.showNotification('❌ کاربری با این نام کاربری یا ایمیل قبلاً وجود دارد', 'error');
                 return;
             }
 
@@ -241,16 +282,21 @@ class AuthSystem {
             this.users.push(newUser);
             localStorage.setItem('users', JSON.stringify(this.users));
 
-            // Show success message
-            this.showNotification('ثبت‌نام با موفقیت انجام شد', 'success');
+            // Show success message with celebration
+            this.showNotification('🎉 تبریک! ثبت‌نام شما با موفقیت انجام شد', 'success');
+            
+            // Show additional success message
+            setTimeout(() => {
+                this.showNotification('✅ اطلاعات شما در سیستم ذخیره شد', 'success');
+            }, 1000);
             
             // Redirect to login page
             setTimeout(() => {
                 window.location.href = 'login.html';
-            }, 1500);
+            }, 2500);
 
         } catch (error) {
-            this.showNotification('خطا در ثبت‌نام. لطفاً دوباره تلاش کنید', 'error');
+            this.showNotification('❌ خطا در ثبت‌نام. لطفاً دوباره تلاش کنید', 'error');
         } finally {
             this.setButtonLoading(submitBtn, false);
         }
@@ -275,13 +321,13 @@ class AuthSystem {
     // Validate login inputs
     validateLoginInputs(username, password) {
         if (!username) {
-            this.showNotification('لطفاً نام کاربری را وارد کنید', 'error');
+            this.showNotification('❌ لطفاً نام کاربری را وارد کنید', 'error');
             this.highlightInput('username', 'error');
             return false;
         }
         
         if (!password) {
-            this.showNotification('لطفاً رمز عبور را وارد کنید', 'error');
+            this.showNotification('❌ لطفاً رمز عبور را وارد کنید', 'error');
             this.highlightInput('password', 'error');
             return false;
         }
@@ -295,7 +341,7 @@ class AuthSystem {
         
         for (const field of requiredFields) {
             if (!formData[field]) {
-                this.showNotification(`لطفاً ${this.getFieldLabel(field)} را وارد کنید`, 'error');
+                this.showNotification(`❌ لطفاً ${this.getFieldLabel(field)} را وارد کنید`, 'error');
                 this.highlightInput(field, 'error');
                 return false;
             }
@@ -303,21 +349,21 @@ class AuthSystem {
         
         // Validate email format
         if (!this.isValidEmail(formData.email)) {
-            this.showNotification('فرمت ایمیل صحیح نیست', 'error');
+            this.showNotification('❌ فرمت ایمیل صحیح نیست', 'error');
             this.highlightInput('email', 'error');
             return false;
         }
         
         // Validate phone format
         if (!this.isValidPhone(formData.phone)) {
-            this.showNotification('فرمت شماره تلفن صحیح نیست', 'error');
+            this.showNotification('❌ فرمت شماره تلفن صحیح نیست (مثال: 09123456789)', 'error');
             this.highlightInput('phone', 'error');
             return false;
         }
         
         // Validate password match
         if (formData.password !== formData.confirmPassword) {
-            this.showNotification('رمز عبور و تایید آن مطابقت ندارند', 'error');
+            this.showNotification('❌ رمز عبور و تایید آن مطابقت ندارند', 'error');
             this.highlightInput('confirmPassword', 'error');
             return false;
         }
@@ -325,14 +371,14 @@ class AuthSystem {
         // Validate password strength
         const strength = this.checkPasswordStrength(formData.password);
         if (strength.strength < 3) {
-            this.showNotification('رمز عبور باید حداقل متوسط باشد', 'error');
+            this.showNotification('❌ رمز عبور باید حداقل متوسط باشد', 'error');
             this.highlightInput('password', 'error');
             return false;
         }
         
         // Validate terms agreement
         if (!formData.agreeTerms) {
-            this.showNotification('لطفاً با شرایط استفاده موافقت کنید', 'error');
+            this.showNotification('❌ لطفاً با شرایط استفاده موافقت کنید', 'error');
             return false;
         }
         
@@ -417,7 +463,10 @@ class AuthSystem {
         this.currentUser = null;
         localStorage.removeItem('loggedInUser');
         localStorage.removeItem('rememberMe');
-        window.location.href = 'index.html';
+        this.showNotification('👋 با موفقیت خارج شدید', 'info');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
     }
 
     // Check authentication status
@@ -460,7 +509,7 @@ class AuthSystem {
 
     // Handle social login
     handleSocialLogin(provider) {
-        this.showNotification(`ورود با ${provider} در حال توسعه است`, 'info');
+        this.showNotification(`🔄 ورود با ${provider} در حال توسعه است`, 'info');
     }
 
     // Utility functions
@@ -496,7 +545,6 @@ class AuthSystem {
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `
             <div class="notification-content">
-                <i class="fas fa-${this.getNotificationIcon(type)}"></i>
                 <span>${message}</span>
             </div>
         `;
@@ -515,6 +563,8 @@ class AuthSystem {
             transform: translateX(100%);
             transition: transform 0.3s ease;
             max-width: 300px;
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            font-size: 0.9rem;
         `;
         
         // Add to page
@@ -531,17 +581,7 @@ class AuthSystem {
             setTimeout(() => {
                 document.body.removeChild(notification);
             }, 300);
-        }, 3000);
-    }
-
-    getNotificationIcon(type) {
-        const icons = {
-            success: 'check-circle',
-            warning: 'exclamation-triangle',
-            error: 'times-circle',
-            info: 'info-circle'
-        };
-        return icons[type] || 'info-circle';
+        }, 4000);
     }
 
     getNotificationColor(type) {
