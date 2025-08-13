@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سینما - صفحه اصلی</title>
+    <link rel="stylesheet" href="cinema.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-film"></i>
+                <span>سینما</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">خانه</a>
+                <a href="#movies" class="nav-link">فیلم‌ها</a>
+                <a href="#about" class="nav-link">درباره ما</a>
+                <a href="#contact" class="nav-link">تماس</a>
+            </div>
+            <div class="nav-auth">
+                <a href="Login.html" class="btn btn-outline">ورود</a>
+                <a href="signup.html" class="btn btn-primary">ثبت‌نام</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">بهترین فیلم‌های روز را در سینما ببینید</h1>
+            <p class="hero-subtitle">تجربه‌ای بی‌نظیر با کیفیت بالا و صندلی‌های راحت</p>
+            <a href="#movies" class="btn btn-primary btn-large">مشاهده فیلم‌ها</a>
+        </div>
+        <div class="hero-image">
+            <i class="fas fa-film"></i>
+        </div>
+    </section>
+
+    <!-- Movies Section -->
+    <section id="movies" class="movies-section">
+        <div class="container">
+            <h2 class="section-title">فیلم‌های اکران شده</h2>
+            <div class="movies-grid" id="moviesGrid">
+                <!-- Movies will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">درباره سینما</h2>
+                <p>سینمای ما با بیش از 20 سال تجربه، ارائه‌دهنده بهترین فیلم‌های روز دنیا با کیفیت بالا و امکانات مدرن است.</p>
+                <div class="features">
+                    <div class="feature">
+                        <i class="fas fa-couch"></i>
+                        <h3>صندلی‌های راحت</h3>
+                        <p>صندلی‌های مدرن و راحت برای تجربه‌ای بهتر</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-volume-up"></i>
+                        <h3>صوت با کیفیت</h3>
+                        <p>سیستم صوتی پیشرفته برای کیفیت صدای عالی</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-ticket-alt"></i>
+                        <h3>رزرو آنلاین</h3>
+                        <p>رزرو آسان و سریع صندلی از طریق وب‌سایت</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">تماس با ما</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3>آدرس</h3>
+                        <p>تهران، خیابان ولیعصر، پلاک 123</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h3>تلفن</h3>
+                        <p>021-12345678</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h3>ایمیل</h3>
+                        <p>info@cinema.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>سینما</h3>
+                    <p>بهترین تجربه سینمایی را با ما تجربه کنید</p>
+                </div>
+                <div class="footer-section">
+                    <h3>لینک‌های مفید</h3>
+                    <ul>
+                        <li><a href="#movies">فیلم‌ها</a></li>
+                        <li><a href="#about">درباره ما</a></li>
+                        <li><a href="#contact">تماس</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>شبکه‌های اجتماعی</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 سینما. تمامی حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cinema.js"></script>
+</body>
+</html>

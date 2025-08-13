@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انتخاب صندلی - سینما</title>
+    <link rel="stylesheet" href="seats.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <a href="index.html" style="color: white; text-decoration: none;">
+                    <i class="fas fa-film"></i>
+                    <span>سینما</span>
+                </a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">خانه</a>
+                <a href="index.html#movies" class="nav-link">فیلم‌ها</a>
+            </div>
+            <div class="nav-auth">
+                <span id="userInfo" class="user-info"></span>
+                <button onclick="logout()" class="btn btn-outline">خروج</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Movie Info -->
+            <div class="movie-info-section">
+                <div class="movie-details" id="movieDetails">
+                    <!-- Movie details will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Screen -->
+            <div class="screen-section">
+                <div class="screen">
+                    <i class="fas fa-tv"></i>
+                    <span>صفحه نمایش</span>
+                </div>
+            </div>
+
+            <!-- Seats Section -->
+            <div class="seats-section">
+                <h2>انتخاب صندلی</h2>
+                <div class="seats-container">
+                    <div class="seats-grid" id="seatsGrid">
+                        <!-- Seats will be generated here -->
+                    </div>
+                </div>
+                
+                <!-- Seat Legend -->
+                <div class="seat-legend">
+                    <div class="legend-item">
+                        <div class="seat available"></div>
+                        <span>خالی</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="seat selected"></div>
+                        <span>انتخاب شده</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="seat occupied"></div>
+                        <span>اشغال شده</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Summary -->
+            <div class="booking-summary" id="bookingSummary" style="display: none;">
+                <h3>خلاصه رزرو</h3>
+                <div class="summary-details">
+                    <div class="summary-item">
+                        <span>فیلم:</span>
+                        <span id="summaryMovie">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>صندلی‌های انتخاب شده:</span>
+                        <span id="summarySeats">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>قیمت کل:</span>
+                        <span id="summaryPrice">-</span>
+                    </div>
+                </div>
+                <button onclick="confirmBooking()" class="btn btn-primary btn-large">
+                    تایید رزرو
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 سینما. تمامی حقوق محفوظ است.</p>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>رزرو موفق!</h3>
+            </div>
+            <div class="modal-body">
+                <i class="fas fa-check-circle success-icon"></i>
+                <p>صندلی‌های شما با موفقیت رزرو شد!</p>
+                <div class="booking-details">
+                    <p><strong>کد رزرو:</strong> <span id="bookingCode">-</span></p>
+                    <p><strong>تاریخ:</strong> <span id="bookingDate">-</span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="goToHome()" class="btn btn-primary">بازگشت به خانه</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="seats.js"></script>
+</body>
+</html>

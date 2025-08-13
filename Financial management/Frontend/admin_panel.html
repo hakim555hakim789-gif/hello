@@ -1,33 +1,265 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>پنل ادمین</title>
-  <link rel="stylesheet" href="panel.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل ادمین - سینما</title>
+    <link rel="stylesheet" href="admin_panel.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <aside class="sidebar">
-      <h2>پنل ادمین</h2>
-      <ul>
-        <li><a href="#" class="active" onclick="showUsers()">👥 کاربران</a></li>
-        <li><a href="#" onclick="showTransactions()">💰 تراکنش‌ها</a></li>
-        <li><a href="Login.html" onclick="logout()">🚪 خروج</a></li>
-      </ul>
-    </aside>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav-brand">
+                <i class="fas fa-crown"></i>
+                <span>پنل ادمین</span>
+            </div>
+            <div class="nav-menu">
+                <a href="#dashboard" class="nav-link active">داشبورد</a>
+                <a href="#movies" class="nav-link">مدیریت فیلم‌ها</a>
+                <a href="#users" class="nav-link">کاربران</a>
+                <a href="#bookings" class="nav-link">رزروها</a>
+                <a href="#reports" class="nav-link">گزارشات</a>
+            </div>
+            <div class="nav-auth">
+                <span id="adminInfo" class="admin-info"></span>
+                <button onclick="logout()" class="btn btn-outline">خروج</button>
+            </div>
+        </nav>
+    </header>
 
-    <main class="main">
-      <header>
-        <h1>خوش آمدید ادمین</h1>
-        <p>مدیریت کامل کاربران و تراکنش‌ها</p>
-      </header>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="dashboard-section">
+                <h2 class="section-title">داشبورد</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>کل فیلم‌ها</h3>
+                            <p id="totalMovies">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>کل کاربران</h3>
+                            <p id="totalUsers">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>کل رزروها</h3>
+                            <p id="totalBookings">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>درآمد کل</h3>
+                            <p id="totalRevenue">0 تومان</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-      <section class="section" id="contentArea">
-      </section>
+            <!-- Movies Management Section -->
+            <section id="movies" class="movies-section">
+                <h2 class="section-title">مدیریت فیلم‌ها</h2>
+                <div class="section-header">
+                    <button onclick="showAddMovieModal()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        افزودن فیلم جدید
+                    </button>
+                </div>
+                <div class="movies-table-container">
+                    <table class="movies-table">
+                        <thead>
+                            <tr>
+                                <th>تصویر</th>
+                                <th>عنوان</th>
+                                <th>ژانر</th>
+                                <th>امتیاز</th>
+                                <th>قیمت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moviesTableBody">
+                            <!-- Movies will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Users Management Section -->
+            <section id="users" class="users-section">
+                <h2 class="section-title">مدیریت کاربران</h2>
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>نام کاربری</th>
+                                <th>نقش</th>
+                                <th>تاریخ عضویت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="bookings" class="bookings-section">
+                <h2 class="section-title">مدیریت رزروها</h2>
+                <div class="bookings-table-container">
+                    <table class="bookings-table">
+                        <thead>
+                            <tr>
+                                <th>کد رزرو</th>
+                                <th>فیلم</th>
+                                <th>کاربر</th>
+                                <th>صندلی‌ها</th>
+                                <th>قیمت کل</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <!-- Bookings will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="reports-section">
+                <h2 class="section-title">گزارشات</h2>
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>محبوب‌ترین فیلم‌ها</h3>
+                        <div id="popularMovies" class="report-content">
+                            <!-- Popular movies will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="report-card">
+                        <h3>درآمد ماهانه</h3>
+                        <div id="monthlyRevenue" class="report-content">
+                            <!-- Monthly revenue chart will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
-  </div>
 
-  <script src="/Backend/admin_panel.js"></script>
+    <!-- Add Movie Modal -->
+    <div id="addMovieModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>افزودن فیلم جدید</h3>
+                <button onclick="closeAddMovieModal()" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addMovieForm">
+                    <div class="form-group">
+                        <label for="movieTitle">عنوان فیلم</label>
+                        <input type="text" id="movieTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieGenre">ژانر</label>
+                        <input type="text" id="movieGenre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieRating">امتیاز</label>
+                        <input type="number" id="movieRating" min="0" max="5" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="moviePrice">قیمت (تومان)</label>
+                        <input type="number" id="moviePrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDuration">مدت زمان</label>
+                        <input type="text" id="movieDuration" placeholder="مثال: 2 ساعت و 30 دقیقه" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="movieDescription">توضیحات</label>
+                        <textarea id="movieDescription" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeAddMovieModal()" class="btn btn-outline">انصراف</button>
+                <button onclick="addMovie()" class="btn btn-primary">افزودن فیلم</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Movie Modal -->
+    <div id="editMovieModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ویرایش فیلم</h3>
+                <button onclick="closeEditMovieModal()" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editMovieForm">
+                    <input type="hidden" id="editMovieId">
+                    <div class="form-group">
+                        <label for="editMovieTitle">عنوان فیلم</label>
+                        <input type="text" id="editMovieTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMovieGenre">ژانر</label>
+                        <input type="text" id="editMovieGenre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMovieRating">امتیاز</label>
+                        <input type="number" id="editMovieRating" min="0" max="5" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMoviePrice">قیمت (تومان)</label>
+                        <input type="number" id="editMoviePrice" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMovieDuration">مدت زمان</label>
+                        <input type="text" id="editMovieDuration" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMovieDescription">توضیحات</label>
+                        <textarea id="editMovieDescription" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeEditMovieModal()" class="btn btn-outline">انصراف</button>
+                <button onclick="updateMovie()" class="btn btn-primary">ذخیره تغییرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 سینما. تمامی حقوق محفوظ است.</p>
+        </div>
+    </footer>
+
+    <script src="admin_panel.js"></script>
 </body>
 </html>
 
