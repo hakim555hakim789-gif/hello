@@ -62,6 +62,9 @@ async function loadInitialData() {
             console.log('Bookings loaded to localStorage');
         }
         
+        // Always run password migration to ensure plain passwords are used
+        migrateUserPasswordsToPlain();
+        
         console.log('All initial data loaded successfully!');
         
     } catch (error) {
@@ -69,6 +72,43 @@ async function loadInitialData() {
         console.log('Using default data instead');
         // If JSON file not found, use default data
         loadDefaultData();
+        // Run migration as well, in case users existed already
+        migrateUserPasswordsToPlain();
+    }
+}
+
+// Migrate hashed passwords (SHA-256) in localStorage users to plain defaults
+function migrateUserPasswordsToPlain() {
+    try {
+        const usersRaw = localStorage.getItem('users');
+        if (!usersRaw) return;
+        
+        const users = JSON.parse(usersRaw);
+        let changed = false;
+        const sha256Regex = /^[a-f0-9]{64}$/i;
+        
+        const mapDefaultPassword = (user) => {
+            if (user.role === 'admin') return 'admin123';
+            if (user.role === 'representative') return 'rep123';
+            if (user.role === 'cinema_manager') return 'manager123';
+            return 'user123';
+        };
+        
+        users.forEach(user => {
+            if (typeof user.password === 'string' && sha256Regex.test(user.password)) {
+                user.password = mapDefaultPassword(user);
+                changed = true;
+            }
+        });
+        
+        if (changed) {
+            localStorage.setItem('users', JSON.stringify(users));
+            console.log('User passwords migrated to plain text defaults');
+        } else {
+            console.log('No password migration required');
+        }
+    } catch (e) {
+        console.warn('Password migration failed:', e);
     }
 }
 
