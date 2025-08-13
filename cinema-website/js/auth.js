@@ -27,7 +27,7 @@ class AuthSystem {
                     firstName: 'مدیر',
                     lastName: 'سیستم',
                     phone: '09123456789',
-                    password: this.hashPassword('admin123'),
+                    password: 'admin123',
                     role: 'admin',
                     createdAt: new Date().toISOString(),
                     isActive: true
@@ -39,7 +39,7 @@ class AuthSystem {
                     firstName: 'نماینده',
                     lastName: 'عمومی',
                     phone: '09187654321',
-                    password: this.hashPassword('rep123'),
+                    password: 'rep123',
                     role: 'representative',
                     createdAt: new Date().toISOString(),
                     isActive: true
@@ -51,7 +51,7 @@ class AuthSystem {
                     firstName: 'احمد',
                     lastName: 'محمدی',
                     phone: '09111111111',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 1,
                     createdAt: new Date().toISOString(),
@@ -64,7 +64,7 @@ class AuthSystem {
                     firstName: 'فاطمه',
                     lastName: 'احمدی',
                     phone: '09122222222',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 2,
                     createdAt: new Date().toISOString(),
@@ -77,7 +77,7 @@ class AuthSystem {
                     firstName: 'علی',
                     lastName: 'رضایی',
                     phone: '09133333333',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 3,
                     createdAt: new Date().toISOString(),
@@ -107,7 +107,7 @@ class AuthSystem {
                     firstName: 'مدیر',
                     lastName: 'سیستم',
                     phone: '09123456789',
-                    password: this.hashPassword('admin123'),
+                    password: 'admin123',
                     role: 'admin',
                     createdAt: new Date().toISOString(),
                     isActive: true
@@ -119,7 +119,7 @@ class AuthSystem {
                     firstName: 'نماینده',
                     lastName: 'عمومی',
                     phone: '09187654321',
-                    password: this.hashPassword('rep123'),
+                    password: 'rep123',
                     role: 'representative',
                     createdAt: new Date().toISOString(),
                     isActive: true
@@ -131,7 +131,7 @@ class AuthSystem {
                     firstName: 'احمد',
                     lastName: 'محمدی',
                     phone: '09111111111',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 1,
                     createdAt: new Date().toISOString(),
@@ -144,7 +144,7 @@ class AuthSystem {
                     firstName: 'فاطمه',
                     lastName: 'احمدی',
                     phone: '09122222222',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 2,
                     createdAt: new Date().toISOString(),
@@ -157,7 +157,7 @@ class AuthSystem {
                     firstName: 'علی',
                     lastName: 'رضایی',
                     phone: '09133333333',
-                    password: this.hashPassword('manager123'),
+                    password: 'manager123',
                     role: 'cinema_manager',
                     cinemaId: 3,
                     createdAt: new Date().toISOString(),
@@ -190,14 +190,27 @@ class AuthSystem {
         return user ? JSON.parse(user) : null;
     }
 
-    // Hash password using SHA-256
+    // Hash password using SHA-256 (disabled: now returns plain for storage)
     hashPassword(password) {
-        return CryptoJS.SHA256(password).toString();
+        // Store plain password to simplify login per user request
+        return password;
     }
 
-    // Verify password
-    verifyPassword(password, hashedPassword) {
-        return this.hashPassword(password) === hashedPassword;
+    // Verify password: support both plain and SHA-256 hashed (backward compatible)
+    verifyPassword(password, storedPassword) {
+        try {
+            // 1) Plain comparison (new accounts)
+            if (password === storedPassword) return true;
+            
+            // 2) Backward compatibility: compare SHA-256(password) with storedPassword
+            if (typeof CryptoJS !== 'undefined') {
+                const hashed = CryptoJS.SHA256(password).toString();
+                if (hashed === storedPassword) return true;
+            }
+        } catch (e) {
+            // no-op
+        }
+        return false;
     }
 
     // Check password strength
@@ -523,12 +536,12 @@ class AuthSystem {
     createUser(formData) {
         return {
             id: this.users.length + 1,
-            username: formData.email.split('@')[0], // Use email prefix as username
+            username: formData.email.split('@')[0],
             email: formData.email,
             firstName: formData.firstName,
             lastName: formData.lastName,
             phone: formData.phone,
-            password: this.hashPassword(formData.password),
+            password: formData.password, // store plain text per request
             role: 'user',
             createdAt: new Date().toISOString(),
             isActive: true,
