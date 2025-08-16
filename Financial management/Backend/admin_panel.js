@@ -1,5 +1,51 @@
+// کلاس پایه برای کاربر
+class AdminUser {
+  constructor(id, username, password, created_acc, role = 'user') {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.created_acc = created_acc;
+    this.role = role;
+  }
+}
 
+// کلاس مدیریت کاربران
+class UserManager {
+  constructor() {
+    this.users = [];
+  }
 
+  addUser(user) {
+    this.users.push(user);
+  }
+
+  findUserById(id) {
+    return this.users.find(u => u.id === id);
+  }
+}
+
+// کلاس مدیریت تراکنش‌ها
+class AdminTransactionManager {
+  constructor() {
+    this.transactions = [];
+  }
+
+  addTransaction(transaction) {
+    this.transactions.push(transaction);
+  }
+
+  getTransactionsByUser(userId) {
+    return this.transactions.filter(t => t.user_id === userId);
+  }
+}
+
+// کلاس اصلی پنل ادمین
+class AdminPanel {
+  constructor() {
+    this.userManager = new UserManager();
+    this.transactionManager = new AdminTransactionManager();
+  }
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
   const loggedIn = JSON.parse(localStorage.getItem("loggedInUser"));

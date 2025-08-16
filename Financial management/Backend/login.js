@@ -1,32 +1,32 @@
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-  if (!users.find(u => u.username === "admin")) {
-    users.push({
-      id: Date.now(),
-      username: "admin",
-      password: "admin123",
-      created_acc: new Date().toISOString(),
-      role: "admin"
-    });
-    localStorage.setItem("users", JSON.stringify(users));
-  }
-});
-
-async function check_loging() {
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-
-  if (!username || !password) {
-    alert("لطفاً نام کاربری و رمز عبور را وارد کنید.");
-    return;
+// کلاس مدیریت احراز هویت
+class AuthManager {
+  constructor() {
+    this.users = [];
   }
 
-  try {
+  async loadUsers() {
     let users = JSON.parse(localStorage.getItem("users")) || [];
+    
+    // اطمینان از وجود کاربر ادمین
+    if (!users.find(u => u.username === "admin")) {
+      const adminUser = {
+        id: Date.now(),
+        username: "admin",
+        password: "admin123",
+        created_acc: new Date().toISOString(),
+        role: "admin"
+      };
+      
+      users.push(adminUser);
+      localStorage.setItem("users", JSON.stringify(users));
+    }
 
-    const user = users.find(u => u.username === username && u.password === password);
+    this.users = users;
+    return true;
+  }
+
+  async login(username, password) {
+    const user = this.users.find(u => u.username === username && u.password === password);
 
     if (user) {
       localStorage.setItem('loggedInUser', JSON.stringify({
@@ -41,13 +41,45 @@ async function check_loging() {
       } else {
         window.location.href = "panel.html";
       }
+      
+      return { success: true, user };
     } else {
       alert("نام کاربری یا رمز عبور اشتباه است.");
+      return { success: false };
     }
-  } catch (error) {
-    console.error("خطا در ورود:", error);
-    alert("مشکلی در ورود به سیستم رخ داد.");
   }
+}
+
+// کلاس کاربر
+class User {
+  constructor(id, username, password, created_acc, role = 'user') {
+    this.id = id;
+    this.username = username;
+    this.password = password;
+    this.created_acc = created_acc;
+    this.role = role;
+  }
+}
+
+// ایجاد نمونه از کلاس اصلی
+const authManager = new AuthManager();
+
+// راه‌اندازی پس از بارگذاری DOM
+document.addEventListener("DOMContentLoaded", () => {
+  authManager.loadUsers();
+});
+
+// متد global برای backward compatibility
+async function check_loging() {
+  const username = document.getElementById("username")?.value;
+  const password = document.getElementById("password")?.value;
+  
+  if (!username || !password) {
+    alert("لطفاً نام کاربری و رمز عبور را وارد کنید.");
+    return;
+  }
+  
+  await authManager.login(username, password);
 }
 
 

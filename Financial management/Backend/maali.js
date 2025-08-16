@@ -1,4 +1,37 @@
+// کلاس پایه برای تراکنش
+class Transaction {
+  constructor(id, user_id, title, amount, type, category, date) {
+    this.id = id;
+    this.user_id = user_id;
+    this.title = title;
+    this.amount = amount;
+    this.type = type;
+    this.category = category;
+    this.date = date;
+  }
+}
 
+// کلاس مدیریت تراکنش‌ها
+class TransactionManager {
+  constructor() {
+    this.transactions = [];
+  }
+
+  addTransaction(transaction) {
+    this.transactions.push(transaction);
+  }
+
+  getTransactionsByUser(userId) {
+    return this.transactions.filter(t => t.user_id === userId);
+  }
+}
+
+// کلاس مدیریت مالی
+class FinancialManager {
+  constructor() {
+    this.transactionManager = new TransactionManager();
+  }
+}
 
 const user = JSON.parse(localStorage.getItem('loggedInUser'));
 if (!user) {
@@ -26,8 +59,83 @@ if (localStorage.getItem('allTransactions')) {
     });
 }
 
+// عناصر کمکی فرم
+const formEl = document.getElementById('transactionForm');
+const formTitleEl = document.querySelector('.form-section h2');
+const submitBtnEl = document.querySelector('#transactionForm button[type="submit"]');
+
+// حالت ویرایش
+let editMode = false;
+let editId = null;
+
+function exitEditMode() {
+  editMode = false;
+  editId = null;
+  formEl.classList.remove('editing');
+  if (formTitleEl) formTitleEl.textContent = 'افزودن تراکنش جدید';
+  if (submitBtnEl) submitBtnEl.textContent = 'ثبت تراکنش';
+  const cancelBtn = document.getElementById('cancelEditBtn');
+  if (cancelBtn) cancelBtn.remove();
+  document.getElementById('res').textContent = '';
+}
+
+function editTransaction(id) {
+  const t = allTransactions.find(tr => tr.id === id);
+  if (!t) return;
+  editMode = true;
+  editId = id;
+  document.getElementById('title').value = t.title;
+  document.getElementById('amount').value = t.amount;
+  document.getElementById('type').value = t.type;
+  document.getElementById('category').value = t.category;
+  document.getElementById('date').value = t.date;
+
+  // UI تغییرات
+  formEl.classList.add('editing');
+  if (formTitleEl) formTitleEl.textContent = 'در حال ویرایش تراکنش';
+  if (submitBtnEl) submitBtnEl.textContent = 'ذخیره تغییرات';
+
+  if (!document.getElementById('cancelEditBtn')) {
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.id = 'cancelEditBtn';
+    cancelBtn.className = 'cancel-btn';
+    cancelBtn.textContent = 'لغو ویرایش';
+    submitBtnEl.insertAdjacentElement('afterend', cancelBtn);
+    cancelBtn.addEventListener('click', () => {
+      formEl.reset();
+      exitEditMode();
+    });
+  }
+
+  // اسکرول نرم به فرم
+  document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('res').textContent = 'در حال ویرایش تراکنش...';
+}
+
+// تغییر در event ثبت تراکنش:
 document.getElementById('transactionForm').addEventListener('submit', e => {
   e.preventDefault();
+
+  if (editMode) {
+    // ویرایش تراکنش
+    const idx = allTransactions.findIndex(tr => tr.id === editId);
+    if (idx !== -1) {
+      allTransactions[idx].title = document.getElementById('title').value;
+      allTransactions[idx].amount = parseFloat(document.getElementById('amount').value);
+      allTransactions[idx].type = document.getElementById('type').value;
+      allTransactions[idx].category = document.getElementById('category').value;
+      allTransactions[idx].date = document.getElementById('date').value;
+    }
+    localStorage.setItem('allTransactions', JSON.stringify(allTransactions));
+    userTransactions = allTransactions.filter(t => t.user_id === user.id);
+    showTransactions();
+    calculateStats();
+    formEl.reset();
+    document.getElementById('res').textContent = 'تراکنش ویرایش شد.';
+    exitEditMode();
+    return;
+  }
 
   const newTransaction = {
     id: Date.now(),
@@ -50,6 +158,39 @@ document.getElementById('transactionForm').addEventListener('submit', e => {
   document.getElementById('transactionForm').reset();
 });
 
+// اضافه کردن event برای فیلترها
+
+document.getElementById('searchTitle').addEventListener('input', filterTransactions);
+document.getElementById('filterType').addEventListener('change', filterTransactions);
+document.getElementById('fromDate').addEventListener('change', filterTransactions);
+document.getElementById('toDate').addEventListener('change', filterTransactions);
+
+function filterTransactions() {
+  const searchTitle = document.getElementById('searchTitle').value.trim();
+  const filterType = document.getElementById('filterType').value;
+  const fromDate = document.getElementById('fromDate').value;
+  const toDate = document.getElementById('toDate').value;
+
+  let filtered = allTransactions.filter(t => t.user_id === user.id);
+
+  if (searchTitle) {
+    filtered = filtered.filter(t => t.title.includes(searchTitle));
+  }
+  if (filterType) {
+    filtered = filtered.filter(t => t.type === filterType);
+  }
+  if (fromDate) {
+    filtered = filtered.filter(t => t.date >= fromDate);
+  }
+  if (toDate) {
+    filtered = filtered.filter(t => t.date <= toDate);
+  }
+
+  userTransactions = filtered;
+  showTransactions();
+  calculateStats();
+}
+
 function showTransactions() {
   const container = document.getElementById("transactionsContainer");
   container.innerHTML = "";
@@ -68,6 +209,7 @@ function showTransactions() {
       <strong>${t.title}</strong> - ${t.amount} تومان - ${t.type}
       <br><small>${t.date}</small>
       <button onclick="deleteTransaction(${t.id})">❌ حذف</button>
+      <button onclick="editTransaction(${t.id})" class="edit">✏️ ویرایش</button>
     `;
 
     container.appendChild(div);
